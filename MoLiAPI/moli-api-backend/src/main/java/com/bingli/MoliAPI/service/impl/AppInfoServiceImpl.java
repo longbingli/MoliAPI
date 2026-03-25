@@ -20,6 +20,7 @@ import com.bingli.MoliAPI.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
  * 应用管理服务实现
  *
  */
+@DubboService
 @Service
 @Slf4j
 public class AppInfoServiceImpl extends ServiceImpl<AppInfoMapper, AppInfo> implements AppInfoService {
@@ -52,11 +54,14 @@ public class AppInfoServiceImpl extends ServiceImpl<AppInfoMapper, AppInfo> impl
         String appName = appInfo.getAppName();
         String description = appInfo.getDescription();
         String host = appInfo.getHost();
+        Integer deductPoints = appInfo.getDeductPoints();
 
         // 2. 新增校验（必须字段）
         if (add) {
             ThrowUtils.throwIf(StringUtils.isBlank(appName), ErrorCode.PARAMS_ERROR, "应用名称不能为空");
             ThrowUtils.throwIf(StringUtils.isBlank(host), ErrorCode.PARAMS_ERROR, "接口地址不能为空");
+            ThrowUtils.throwIf(deductPoints == null, ErrorCode.PARAMS_ERROR, "扣除积分不能为空");
+            ThrowUtils.throwIf(deductPoints < 0, ErrorCode.PARAMS_ERROR, "扣除积分不能小于 0");
         }
 
         // 3. 通用校验（有值才校验）

@@ -17,6 +17,7 @@
     <modules>
         <module>moli-api-common</module>
         <module>moli-api-backend</module>
+        <module>moli-api-gateway</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

@@ -34,6 +34,10 @@ public class AppInfoEditRequest implements Serializable {
      * 接口主机地址（网关地址）
      */
     private String host;
+/**
+ * 扣除积分数
+ */
+    private Integer deductPoints;
 
 
     /**

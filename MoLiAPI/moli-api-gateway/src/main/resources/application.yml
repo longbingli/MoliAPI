@@ -1,0 +1,27 @@
+
+server:
+  port: 8090
+spring:
+  application:
+    name: moli-api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: moli-api-backend
+          uri: http://localhost:8101
+          predicates:
+            - Path=/api/**
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8849
+
+dubbo:
+  application:
+    name: moli-api-gateway
+
+  registry:
+    address: nacos://127.0.0.1:8848
+
+  protocol:
+    name: dubbo
+    port: -1   # ????

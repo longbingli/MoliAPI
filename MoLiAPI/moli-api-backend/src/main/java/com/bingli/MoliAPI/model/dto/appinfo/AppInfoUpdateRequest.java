@@ -31,6 +31,11 @@ public class AppInfoUpdateRequest implements Serializable {
     private String host;
 
     /**
+     * 扣除积分数
+     */
+    private Integer deductPoints;
+
+    /**
      * 创建用户ID
      */
     private Long userId;

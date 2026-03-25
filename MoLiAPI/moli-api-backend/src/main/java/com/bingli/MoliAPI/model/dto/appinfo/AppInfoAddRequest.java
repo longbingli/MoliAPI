@@ -30,6 +30,11 @@ public class AppInfoAddRequest implements Serializable {
      */
     private String host;
 
+    /**
+     * 调用扣除积分数
+     */
+    private Integer deductPoints;
+
 
     /**
      * 状态（0-禁用，1-启用）

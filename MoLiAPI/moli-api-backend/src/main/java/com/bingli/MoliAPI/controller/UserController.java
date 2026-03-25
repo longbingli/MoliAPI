@@ -22,6 +22,7 @@ import com.bingli.MoliAPI.model.entity.User;
 import com.bingli.MoliAPI.model.vo.LoginUserVO;
 import com.bingli.MoliAPI.model.vo.UserVO;
 import com.bingli.MoliAPI.service.UserService;
+import com.bingli.MoliAPI.utils.AESUtil;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
@@ -64,7 +65,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
+    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) throws Exception {
         if (userRegisterRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -144,8 +145,9 @@ public class UserController {
      * @return
      */
     @GetMapping("/get/login")
-    public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
+    public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) throws Exception {
         User user = userService.getLoginUser(request);
+             user.setSecretKey(AESUtil.decrypt(user.getSecretKey()));
         return ResultUtils.success(userService.getLoginUserVO(user));
     }
 

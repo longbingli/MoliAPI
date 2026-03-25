@@ -33,7 +33,14 @@ public class AppInfo {
      * 接口主机地址（网关地址）
      */
     private String host;
-
+    /**
+     * 总调用次数
+     */
+    private Integer totalNum;
+     /**
+     * 调用扣除积分
+     */
+    private Integer deductPoints;
     /**
      * 创建用户ID
      */

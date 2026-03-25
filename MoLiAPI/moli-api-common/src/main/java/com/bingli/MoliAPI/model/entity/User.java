@@ -63,6 +63,23 @@ public class User implements Serializable {
      * 用户角色：user/admin/ban
      */
     private String userRole;
+    /**
+     * 状态 0-正常 1-封禁
+     */
+    private Integer status;
+
+    /**
+     * accessKey
+     */
+    private String accessKey;
+    /**
+     * secretKey
+     */
+    private String secretKey;
+    /**
+     * 积分
+     */
+    private Integer points;
 
     /**
      * 创建时间

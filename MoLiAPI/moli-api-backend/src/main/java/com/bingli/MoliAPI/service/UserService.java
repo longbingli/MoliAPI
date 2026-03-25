@@ -25,7 +25,7 @@ public interface UserService extends IService<User> {
      * @param checkPassword 校验密码
      * @return 新用户 id
      */
-    long userRegister(String userAccount, String userPassword, String checkPassword);
+    long userRegister(String userAccount, String userPassword, String checkPassword) throws Exception;
 
     /**
      * 用户登录
@@ -117,4 +117,11 @@ public interface UserService extends IService<User> {
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 
+    /**
+     * 获取当前登录用户
+     *
+     * @param accessKey
+     * @return
+     */
+    User getInvokeUser(String accessKey);
 }

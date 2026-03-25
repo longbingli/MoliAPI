@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bingli.MoliAPI.common.ErrorCode;
 import com.bingli.MoliAPI.constant.CommonConstant;
 import com.bingli.MoliAPI.exception.BusinessException;
+import com.bingli.MoliAPI.exception.ThrowUtils;
+import com.bingli.MoliAPI.manager.UserPointManager;
 import com.bingli.MoliAPI.mapper.UserMapper;
 import com.bingli.MoliAPI.model.dto.user.UserQueryRequest;
 import com.bingli.MoliAPI.model.entity.User;
@@ -15,6 +17,8 @@ import com.bingli.MoliAPI.model.enums.UserRoleEnum;
 import com.bingli.MoliAPI.model.vo.LoginUserVO;
 import com.bingli.MoliAPI.model.vo.UserVO;
 import com.bingli.MoliAPI.service.UserService;
+import com.bingli.MoliAPI.utils.AESUtil;
+import com.bingli.MoliAPI.utils.KeyUtils;
 import com.bingli.MoliAPI.utils.SqlUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -39,10 +44,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 盐值，混淆密码
      */
-    public static final String SALT = "yupi";
+    public static final String SALT = "bingli";
+    /**
+     * 首次注册奖励积分
+     */
+    public static final int FIRST_REGISTER_BONUS_POINTS = 100;
+    private final UserPointManager userPointManager;
+
+    public UserServiceImpl(UserPointManager userPointManager) {
+        this.userPointManager = userPointManager;
+    }
 
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword) {
+    public long userRegister(String userAccount, String userPassword, String checkPassword) throws Exception {
         // 1. 校验
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
@@ -67,14 +81,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
             // 2. 加密
             String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+
+            String accessKey = KeyUtils.generateAccessKey(userAccount, SALT);
+            String secretKey = KeyUtils.generateSecretKey();
+
             // 3. 插入数据
             User user = new User();
             user.setUserAccount(userAccount);
             user.setUserPassword(encryptPassword);
+            user.setAccessKey(AESUtil.encrypt(accessKey));
+            user.setSecretKey(AESUtil.encrypt(secretKey));
             boolean saveResult = this.save(user);
             if (!saveResult) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
             }
+            String requestId = "register:bonus:" + user.getId();
+            userPointManager.addPoints(user.getId(), FIRST_REGISTER_BONUS_POINTS, requestId);
             return user.getId();
         }
     }
@@ -267,5 +289,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
+    }
+
+    @Override
+    public User getInvokeUser(String accessKey) {
+        ThrowUtils.throwIf(accessKey == null, ErrorCode.PARAMS_ERROR, "访问密钥不能为空");
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+                           queryWrapper.eq("accessKey", accessKey);
+                           queryWrapper.eq("status", 0);
+        return this.getOne(queryWrapper);
     }
 }

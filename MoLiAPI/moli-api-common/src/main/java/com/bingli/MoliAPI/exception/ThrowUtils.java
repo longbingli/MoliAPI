@@ -1,5 +1,6 @@
 package com.bingli.MoliAPI.exception;
 
+
 import com.bingli.MoliAPI.common.ErrorCode;
 
 /**

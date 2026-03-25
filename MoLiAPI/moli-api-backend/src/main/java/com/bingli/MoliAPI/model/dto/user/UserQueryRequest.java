@@ -39,6 +39,20 @@ public class UserQueryRequest extends PageRequest implements Serializable {
     private String userProfile;
 
     /**
+     * accessKey
+     */
+    private String accessKey;
+    /**
+     * secretKey
+     */
+    private String secretKey;
+    /**
+     * 积分
+     */
+    private Integer points;
+
+
+    /**
      * 用户角色：user/admin/ban
      */
     private String userRole;

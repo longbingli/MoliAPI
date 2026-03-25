@@ -1,14 +1,10 @@
 package com.bingli.MoliAPI.model.dto.appinfo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.bingli.MoliAPI.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 查询应用管理请求
@@ -39,6 +35,10 @@ public class AppInfoQueryRequest extends PageRequest implements Serializable {
      */
     private String host;
 
+    /**
+     * 扣除积分数
+     */
+    private Integer deductPoints;
     /**
      * 创建用户ID
      */
