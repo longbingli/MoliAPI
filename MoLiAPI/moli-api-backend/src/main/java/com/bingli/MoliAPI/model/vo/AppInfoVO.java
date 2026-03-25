@@ -19,22 +19,39 @@ public class AppInfoVO implements Serializable {
     /**
      * id
      */
-    private Long id;
+    private Long appId;
 
     /**
-     * 标题
+     * 应用名称
      */
-    private String title;
+    private String appName;
 
     /**
-     * 内容
+     * 应用描述
      */
-    private String content;
+    private String description;
 
     /**
-     * 创建用户 id
+     * 接口主机地址（网关地址）
+     */
+    private String host;
+    /**
+     * 总调用次数
+     */
+    private Integer totalNum;
+    /**
+     * 调用扣除积分
+     */
+    private Integer deductPoints;
+    /**
+     * 创建用户ID
      */
     private Long userId;
+
+    /**
+     * 状态（0-禁用，1-启用）
+     */
+    private Integer status;
 
     /**
      * 创建时间
@@ -46,10 +63,6 @@ public class AppInfoVO implements Serializable {
      */
     private Date updateTime;
 
-    /**
-     * 标签列表
-     */
-    private List<String> tagList;
 
     /**
      * 创建用户信息

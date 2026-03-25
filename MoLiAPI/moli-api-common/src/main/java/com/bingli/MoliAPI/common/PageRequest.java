@@ -1,6 +1,5 @@
 package com.bingli.MoliAPI.common;
 
-import com.bingli.MoliAPI.constant.CommonConstant;
 import lombok.Data;
 
 /**
@@ -29,5 +28,9 @@ public class PageRequest {
     /**
      * 排序顺序（默认升序）
      */
-    private String sortOrder = CommonConstant.SORT_ORDER_ASC;
+    private String sortOrder = SORT_ORDER_ASC;
+
+
+    public static final String SORT_ORDER_ASC = "ascend";
+
 }

@@ -20,6 +20,8 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
      */
     private Long id;
 
+    private Integer appId;
+
     /**
      * 名称
      */

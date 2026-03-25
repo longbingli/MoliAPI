@@ -59,7 +59,8 @@ public class AppInfoController {
         appInfoService.validAppInfo(appInfo, true);
         User loginUser = userService.getLoginUser(request);
         appInfo.setUserId(loginUser.getId());
-        appInfo.setStatus(1);
+        appInfo.setTotalNum(0);
+        appInfo.setStatus(0);
         // 写入数据库
         boolean result = appInfoService.save(appInfo);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);

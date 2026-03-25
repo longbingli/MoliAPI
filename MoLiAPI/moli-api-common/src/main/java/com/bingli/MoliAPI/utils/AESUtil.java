@@ -16,7 +16,7 @@ public class AESUtil {
 
     // 16 / 24 / 32 字节
     //放配置
-    private static final String AES_KEY = "moli_366876156";
+    private static final String AES_KEY = "moli_36687615601";
 
     /**
      * 加密

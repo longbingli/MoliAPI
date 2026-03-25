@@ -18,6 +18,8 @@ public class InterfaceInfoVO implements Serializable {
 
     private Long id;
 
+
+    private Integer appId;
     /**
      * 名称
      */

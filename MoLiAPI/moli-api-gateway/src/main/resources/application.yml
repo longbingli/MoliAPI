@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: moli-api-gateway
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   cloud:
     gateway:
       routes:
@@ -20,7 +23,7 @@ dubbo:
     name: moli-api-gateway
 
   registry:
-    address: nacos://127.0.0.1:8848
+    address: nacos://127.0.0.1:8849
 
   protocol:
     name: dubbo

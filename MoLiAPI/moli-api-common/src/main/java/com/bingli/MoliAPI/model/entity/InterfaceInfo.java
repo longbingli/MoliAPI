@@ -21,6 +21,8 @@ public class InterfaceInfo {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
+    private Integer appId;
+
     /**
      * 名称
      */

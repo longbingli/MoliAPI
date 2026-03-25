@@ -48,7 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 首次注册奖励积分
      */
-    public static final int FIRST_REGISTER_BONUS_POINTS = 100;
+    public static final int FIRST_REGISTER_BONUS_POINTS = 50;
     private final UserPointManager userPointManager;
 
     public UserServiceImpl(UserPointManager userPointManager) {
@@ -91,12 +91,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setUserPassword(encryptPassword);
             user.setAccessKey(AESUtil.encrypt(accessKey));
             user.setSecretKey(AESUtil.encrypt(secretKey));
+            user.setStatus(0);
+            user.setPoints(50);
             boolean saveResult = this.save(user);
             if (!saveResult) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
             }
             String requestId = "register:bonus:" + user.getId();
             userPointManager.addPoints(user.getId(), FIRST_REGISTER_BONUS_POINTS, requestId);
+
             return user.getId();
         }
     }

@@ -16,6 +16,8 @@ public class InterfaceInfoEditRequest implements Serializable {
      */
     private Long id;
 
+    private Integer appId;
+
     /**
      * 名称
      */

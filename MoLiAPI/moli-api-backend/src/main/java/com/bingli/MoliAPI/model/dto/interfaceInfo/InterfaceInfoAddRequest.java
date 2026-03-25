@@ -10,6 +10,10 @@ import java.io.Serializable;
  */
 @Data
 public class InterfaceInfoAddRequest implements Serializable {
+/**
+ * 应用 id
+ */
+    private Integer appId;
 
 
     /**

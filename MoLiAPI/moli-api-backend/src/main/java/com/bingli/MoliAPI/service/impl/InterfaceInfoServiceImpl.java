@@ -55,13 +55,15 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String requestHeader = interfaceInfo.getRequestHeader();
         String responseHeader = interfaceInfo.getResponseHeader();
         String method = interfaceInfo.getMethod();
+        Integer appId = interfaceInfo.getAppId();
 
         if (add) {
             ThrowUtils.throwIf(StringUtils.isBlank(name), ErrorCode.PARAMS_ERROR, "接口名称不能为空");
             ThrowUtils.throwIf(StringUtils.isBlank(url), ErrorCode.PARAMS_ERROR, "接口地址不能为空");
             ThrowUtils.throwIf(StringUtils.isBlank(method), ErrorCode.PARAMS_ERROR, "请求方法不能为空");
+            ThrowUtils.throwIf(appId == null, ErrorCode.PARAMS_ERROR, "应用信息不能为空");
+            ThrowUtils.throwIf(appId <= 0, ErrorCode.PARAMS_ERROR, "应用信息不能为空");
         }
-
         if (StringUtils.isNotBlank(name)) {
             name = name.trim();
             ThrowUtils.throwIf(name.length() > 50, ErrorCode.PARAMS_ERROR, "接口名称过长");

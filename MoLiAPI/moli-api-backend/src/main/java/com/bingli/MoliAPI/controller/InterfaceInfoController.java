@@ -59,6 +59,9 @@ public class InterfaceInfoController {
         // todo 填充默认值
         User loginUser = userService.getLoginUser(request);
         interfaceInfo.setUserId(loginUser.getId());
+        interfaceInfo.setStatus(0);
+        interfaceInfo.setTotalNum(0);
+        interfaceInfo.setIsDelete(0);
         // 写入数据库
         boolean result = interfaceInfoService.save(interfaceInfo);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
