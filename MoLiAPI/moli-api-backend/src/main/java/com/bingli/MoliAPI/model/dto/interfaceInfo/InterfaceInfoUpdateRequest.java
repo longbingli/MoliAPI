@@ -1,12 +1,10 @@
 package com.bingli.MoliAPI.model.dto.interfaceInfo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+
 
 /**
  * 更新接口管理请求
@@ -16,7 +14,7 @@ public class InterfaceInfoUpdateRequest implements Serializable {
 
     private Long id;
 
-    private Integer appId;
+    private Long appId;
 
     /**
      * 名称

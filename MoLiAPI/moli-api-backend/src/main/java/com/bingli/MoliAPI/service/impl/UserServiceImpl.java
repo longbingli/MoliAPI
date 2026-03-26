@@ -300,6 +300,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
                            queryWrapper.eq("accessKey", accessKey);
                            queryWrapper.eq("status", 0);
-        return this.getOne(queryWrapper);
+        return this.getOne(queryWrapper,false);
     }
 }

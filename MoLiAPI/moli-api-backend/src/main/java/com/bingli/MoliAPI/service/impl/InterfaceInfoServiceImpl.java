@@ -55,7 +55,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String requestHeader = interfaceInfo.getRequestHeader();
         String responseHeader = interfaceInfo.getResponseHeader();
         String method = interfaceInfo.getMethod();
-        Integer appId = interfaceInfo.getAppId();
+        Long appId = interfaceInfo.getAppId();
 
         if (add) {
             ThrowUtils.throwIf(StringUtils.isBlank(name), ErrorCode.PARAMS_ERROR, "接口名称不能为空");

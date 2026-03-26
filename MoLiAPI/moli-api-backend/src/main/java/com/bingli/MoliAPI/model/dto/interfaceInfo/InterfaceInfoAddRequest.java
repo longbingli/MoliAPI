@@ -13,8 +13,7 @@ public class InterfaceInfoAddRequest implements Serializable {
 /**
  * 应用 id
  */
-    private Integer appId;
-
+    private Long appId;
 
     /**
      * 名称

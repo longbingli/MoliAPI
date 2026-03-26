@@ -28,3 +28,11 @@ dubbo:
   protocol:
     name: dubbo
     port: -1   # ????
+
+logging:
+  level:
+    root: INFO
+    com.bingli: DEBUG
+    org.springframework: WARN
+    com.alibaba.nacos: DEBUG
+    org.apache.dubbo: DEBUG

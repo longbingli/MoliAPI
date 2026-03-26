@@ -1,6 +1,6 @@
 package com.bingli.MoliAPI.service;
 
-import org.apache.dubbo.config.annotation.DubboService;
+
 
 /**
  * @Description:
@@ -9,6 +9,8 @@ import org.apache.dubbo.config.annotation.DubboService;
  **/
 public interface AppInfoDubboService {
 
-   String getAppInfoHosts(String path, String method);
+//   String getAppInfoHosts(String path, String method);
+
+   String getAppHostByAppId(Long appId);
 
 }

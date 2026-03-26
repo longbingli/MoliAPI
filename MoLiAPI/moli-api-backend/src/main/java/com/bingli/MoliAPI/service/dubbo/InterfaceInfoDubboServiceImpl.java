@@ -33,7 +33,7 @@ public class InterfaceInfoDubboServiceImpl implements InterfaceInfoDubboService 
                 .eq(InterfaceInfo::getMethod, method)
                 .last("limit 1");
 
-        return interfaceInfoService.getOne(queryWrapper);
+        return interfaceInfoService.getOne(queryWrapper, false);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class InterfaceInfoDubboServiceImpl implements InterfaceInfoDubboService 
         InterfaceInfo interfaceInfo = interfaceInfoService.getById(interfaceInfoId);
         ThrowUtils.throwIf(interfaceInfo == null, ErrorCode.NOT_FOUND_ERROR, "接口信息不存在");
 
-        Long appId = Long.valueOf(interfaceInfo.getAppId());
+        Long appId = interfaceInfo.getAppId();
         ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.NOT_FOUND_ERROR, "接口未关联应用");
 
         // 2. 接口调用次数原子 +1
