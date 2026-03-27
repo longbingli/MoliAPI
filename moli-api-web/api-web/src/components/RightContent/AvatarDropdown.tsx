@@ -1,8 +1,4 @@
-import {
-  LogoutOutlined,
-  SettingOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+﻿import { LogoutOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Spin } from 'antd';
@@ -41,44 +37,25 @@ const useStyles = createStyles(({ token }) => {
   };
 });
 
-export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
-  menu,
-  children,
-}) => {
-  /**
-   * 退出登录，并且将当前的 url 保存
-   */
-  const loginOut = async () => {
-    await outLogin();
-    const { search, pathname } = window.location;
-    const urlParams = new URL(window.location.href).searchParams;
-    const searchParams = new URLSearchParams({
-      redirect: pathname + search,
-    });
-    /** 此方法会跳转到 redirect 参数所在的位置 */
-    const redirect = urlParams.get('redirect');
-    // Note: There may be security issues, please note
-    if (window.location.pathname !== '/user/login' && !redirect) {
-      history.replace({
-        pathname: '/user/login',
-        search: searchParams.toString(),
-      });
-    }
-  };
+export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ children }) => {
   const { styles } = useStyles();
-
   const { initialState, setInitialState } = useModel('@@initialState');
 
-  const onMenuClick: MenuProps['onClick'] = (event) => {
-    const { key } = event;
-    if (key === 'logout') {
+  const loginOut = async () => {
+    try {
+      await outLogin();
+    } finally {
       flushSync(() => {
         setInitialState((s) => ({ ...s, currentUser: undefined }));
       });
-      loginOut();
-      return;
+      history.replace('/user/login');
     }
-    history.push(`/account/${key}`);
+  };
+
+  const onMenuClick: MenuProps['onClick'] = async (event) => {
+    if (event.key === 'logout') {
+      await loginOut();
+    }
   };
 
   const loading = (
@@ -98,29 +75,11 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
   }
 
   const { currentUser } = initialState;
-
   if (!currentUser || !(currentUser.name || currentUser.userName)) {
     return loading;
   }
 
   const menuItems = [
-    ...(menu
-      ? [
-          {
-            key: 'center',
-            icon: <UserOutlined />,
-            label: '个人中心',
-          },
-          {
-            key: 'settings',
-            icon: <SettingOutlined />,
-            label: '个人设置',
-          },
-          {
-            type: 'divider' as const,
-          },
-        ]
-      : []),
     {
       key: 'logout',
       icon: <LogoutOutlined />,
@@ -130,6 +89,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({
 
   return (
     <HeaderDropdown
+      trigger={['click']}
       menu={{
         selectedKeys: [],
         onClick: onMenuClick,
