@@ -1,4 +1,4 @@
-declare module 'slash2';
+﻿declare module 'slash2';
 declare module '*.css';
 declare module '*.less';
 declare module '*.scss';
