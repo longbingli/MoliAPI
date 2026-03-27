@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: moli-client-demo
+
+
+moli:
+  client:
+    accessKey: ak_moli_d34202bde65091a7fa2b8eb391789209
+    secretKey: sk_moli_Vs-kn1uKxU7LM0i9aI91MQ
+    gatewayHost: http://localhost:8090
+server:
+  port: 8092
