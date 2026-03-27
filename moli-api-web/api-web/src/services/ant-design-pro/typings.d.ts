@@ -49,4 +49,81 @@ declare namespace API {
     userPassword?: string;
     checkPassword?: string;
   };
+
+  type AppInfoVO = {
+    appId?: number | string;
+    appName?: string;
+    description?: string;
+    host?: string;
+    totalNum?: number;
+    deductPoints?: number;
+    userId?: number | string;
+    status?: number | string;
+    createTime?: string;
+    updateTime?: string;
+  };
+
+  type AppInfoQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    appId?: number | string;
+    appName?: string;
+    description?: string;
+    host?: string;
+    deductPoints?: number;
+    userId?: number | string;
+    notId?: number | string;
+    searchText?: string;
+  };
+
+  type PageAppInfoVO = {
+    records?: AppInfoVO[];
+    total?: number | string;
+    size?: number | string;
+    current?: number | string;
+  };
+
+  type InterfaceInfoVO = {
+    id?: number | string;
+    appId?: number | string;
+    name?: string;
+    description?: string;
+    url?: string;
+    requestHeader?: string;
+    responseHeader?: string;
+    status?: number | string;
+    method?: string;
+    userId?: number | string;
+    createTime?: string;
+    updateTime?: string;
+  };
+
+  type InterfaceInfoQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    id?: number | string;
+    appId?: number | string;
+    name?: string;
+    description?: string;
+    requestHeader?: string;
+    responseHeader?: string;
+    status?: number | string;
+    method?: string;
+    userId?: number | string;
+    createTime?: string;
+    updateTime?: string;
+    notId?: number | string;
+    searchText?: string;
+  };
+
+  type PageInterfaceInfoVO = {
+    records?: InterfaceInfoVO[];
+    total?: number | string;
+    size?: number | string;
+    current?: number | string;
+  };
 }

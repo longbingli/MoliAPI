@@ -17,6 +17,14 @@
     component: './Home',
   },
   {
+    path: '/apps/:appId/interfaces',
+    component: './InterfaceList',
+  },
+  {
+    path: '/apps/:appId/interfaces/:interfaceId',
+    component: './InterfaceDetail',
+  },
+  {
     path: '/',
     redirect: '/home',
   },
