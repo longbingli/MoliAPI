@@ -294,12 +294,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return queryWrapper;
     }
 
-    @Override
-    public User getInvokeUser(String accessKey) {
-        ThrowUtils.throwIf(accessKey == null, ErrorCode.PARAMS_ERROR, "访问密钥不能为空");
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-                           queryWrapper.eq("accessKey", accessKey);
-                           queryWrapper.eq("status", 0);
-        return this.getOne(queryWrapper,false);
-    }
+
 }

@@ -117,11 +117,5 @@ public interface UserService extends IService<User> {
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 
-    /**
-     * 获取当前登录用户
-     *
-     * @param accessKey
-     * @return
-     */
-    User getInvokeUser(String accessKey);
+
 }

@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d6e11c27-dfd9-4897-a37c-ac98f9c049d4" name="更改" comment="" />
+    <list default="true" id="d6e11c27-dfd9-4897-a37c-ac98f9c049d4" name="更改" comment="feat(project): 初始化moliapi客户端演示项目&#10;&#10;- 添加 Apifox 上传器项目配置文件&#10;- 配置 Spring Boot 应用程序属性包括访问密钥、网关主机和端口设置&#10;- 创建编译器配置支持注解处理器和参数编译&#10;- 实现 DemoController 提供诗歌随机请求接口&#10;- 设置 Java 编码为 UTF-8&#10;- 配置 Maven 远程仓库包括中央仓库和阿里云镜像&#10;- 添加项目根目录管理配置指定 JDK 17&#10;- 创建主应用程序入口类 MoliClientDemoApplication&#10;- 添加 Spring Boot 测试类验证上下文加载&#10;- 配置 Maven POM 文件定义项目依赖和插件&#10;- 添加 UI 设计器组件配置文件&#10;- 配置 Git 版本控制映射&#10;- 设置 IDE 工作空间配置包括自动导入和问题视图">
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/main/java/com/bingli/MoliAPI/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/main/java/com/bingli/MoliAPI/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/main/java/com/bingli/MoliAPI/service/dubbo/UserDubboServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/main/java/com/bingli/MoliAPI/service/dubbo/UserDubboServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/main/java/com/bingli/MoliAPI/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/main/java/com/bingli/MoliAPI/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/test/java/com/bingli/MoliAPI/MainApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/test/java/com/bingli/MoliAPI/manager/CosManagerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/test/java/com/bingli/MoliAPI/mapper/PostFavourMapperTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/test/java/com/bingli/MoliAPI/mapper/PostMapperTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/test/java/com/bingli/MoliAPI/service/PostFavourServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/test/java/com/bingli/MoliAPI/service/PostThumbServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/test/java/com/bingli/MoliAPI/service/UserServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-backend/src/test/java/com/bingli/MoliAPI/utils/EasyExcelTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MoLiAPI/moli-api-common/src/test/java/com/bingli/MoliAPI/MoliApiCommonApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,11 +112,24 @@
       <updated>1774554383936</updated>
       <workItem from="1774554385000" duration="5841000" />
       <workItem from="1774560718789" duration="699000" />
-      <workItem from="1774616633440" duration="711000" />
+      <workItem from="1774616633440" duration="1403000" />
     </task>
+    <task id="LOCAL-00001" summary="feat(project): 初始化moliapi客户端演示项目&#10;&#10;- 添加 Apifox 上传器项目配置文件&#10;- 配置 Spring Boot 应用程序属性包括访问密钥、网关主机和端口设置&#10;- 创建编译器配置支持注解处理器和参数编译&#10;- 实现 DemoController 提供诗歌随机请求接口&#10;- 设置 Java 编码为 UTF-8&#10;- 配置 Maven 远程仓库包括中央仓库和阿里云镜像&#10;- 添加项目根目录管理配置指定 JDK 17&#10;- 创建主应用程序入口类 MoliClientDemoApplication&#10;- 添加 Spring Boot 测试类验证上下文加载&#10;- 配置 Maven POM 文件定义项目依赖和插件&#10;- 添加 UI 设计器组件配置文件&#10;- 配置 Git 版本控制映射&#10;- 设置 IDE 工作空间配置包括自动导入和问题视图">
+      <option name="closed" value="true" />
+      <created>1774617420731</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1774617420731</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat(project): 初始化moliapi客户端演示项目&#10;&#10;- 添加 Apifox 上传器项目配置文件&#10;- 配置 Spring Boot 应用程序属性包括访问密钥、网关主机和端口设置&#10;- 创建编译器配置支持注解处理器和参数编译&#10;- 实现 DemoController 提供诗歌随机请求接口&#10;- 设置 Java 编码为 UTF-8&#10;- 配置 Maven 远程仓库包括中央仓库和阿里云镜像&#10;- 添加项目根目录管理配置指定 JDK 17&#10;- 创建主应用程序入口类 MoliClientDemoApplication&#10;- 添加 Spring Boot 测试类验证上下文加载&#10;- 配置 Maven POM 文件定义项目依赖和插件&#10;- 添加 UI 设计器组件配置文件&#10;- 配置 Git 版本控制映射&#10;- 设置 IDE 工作空间配置包括自动导入和问题视图" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(project): 初始化moliapi客户端演示项目&#10;&#10;- 添加 Apifox 上传器项目配置文件&#10;- 配置 Spring Boot 应用程序属性包括访问密钥、网关主机和端口设置&#10;- 创建编译器配置支持注解处理器和参数编译&#10;- 实现 DemoController 提供诗歌随机请求接口&#10;- 设置 Java 编码为 UTF-8&#10;- 配置 Maven 远程仓库包括中央仓库和阿里云镜像&#10;- 添加项目根目录管理配置指定 JDK 17&#10;- 创建主应用程序入口类 MoliClientDemoApplication&#10;- 添加 Spring Boot 测试类验证上下文加载&#10;- 配置 Maven POM 文件定义项目依赖和插件&#10;- 添加 UI 设计器组件配置文件&#10;- 配置 Git 版本控制映射&#10;- 设置 IDE 工作空间配置包括自动导入和问题视图" />
   </component>
 </project>

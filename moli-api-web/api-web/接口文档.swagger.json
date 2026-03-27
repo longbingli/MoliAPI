@@ -1,0 +1,3049 @@
+{
+  "info": {
+    "title": "默认模块",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "用户接口"
+    },
+    {
+      "name": "应用管理接口"
+    },
+    {
+      "name": "接口管理接口"
+    }
+  ],
+  "paths": {
+    "/user/register": {
+      "post": {
+        "summary": "用户注册",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserRegisterRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": 0,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseLong",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "用户登录",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserLoginRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "id": 0,
+                  "userName": "",
+                  "userAvatar": "",
+                  "userProfile": "",
+                  "userRole": "",
+                  "createTime": "",
+                  "updateTime": ""
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseLoginUserVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/login/wx_open": {
+      "get": {
+        "summary": "用户登录（微信开放平台）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "id": 0,
+                  "userName": "",
+                  "userAvatar": "",
+                  "userProfile": "",
+                  "userRole": "",
+                  "createTime": "",
+                  "updateTime": ""
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseLoginUserVO"
+            }
+          }
+        },
+        "security": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/logout": {
+      "post": {
+        "summary": "用户注销",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/get/login": {
+      "get": {
+        "summary": "获取当前登录用户",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "id": 0,
+                  "userName": "",
+                  "userAvatar": "",
+                  "userProfile": "",
+                  "userRole": "",
+                  "createTime": "",
+                  "updateTime": ""
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseLoginUserVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/add": {
+      "post": {
+        "summary": "创建用户",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserAddRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": 0,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseLong",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/delete": {
+      "post": {
+        "summary": "删除用户",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/DeleteRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/update": {
+      "post": {
+        "summary": "更新用户",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserUpdateRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/get": {
+      "get": {
+        "summary": "根据 id 获取用户（仅管理员）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "id": 0,
+                  "userAccount": "",
+                  "userPassword": "",
+                  "unionId": "",
+                  "mpOpenId": "",
+                  "userName": "",
+                  "userAvatar": "",
+                  "userProfile": "",
+                  "userRole": "",
+                  "status": 0,
+                  "accessKey": "",
+                  "secretKey": "",
+                  "points": 0,
+                  "createTime": "",
+                  "updateTime": "",
+                  "isDelete": 0
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseUser",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/get/vo": {
+      "get": {
+        "summary": "根据 id 获取包装类",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "id": 0,
+                  "userName": "",
+                  "userAvatar": "",
+                  "userProfile": "",
+                  "userRole": "",
+                  "createTime": ""
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseUserVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/list/page": {
+      "post": {
+        "summary": "分页获取用户列表（仅管理员）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserQueryRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "records": [
+                    {
+                      "id": 0,
+                      "userAccount": "",
+                      "userPassword": "",
+                      "unionId": "",
+                      "mpOpenId": "",
+                      "userName": "",
+                      "userAvatar": "",
+                      "userProfile": "",
+                      "userRole": "",
+                      "status": 0,
+                      "accessKey": "",
+                      "secretKey": "",
+                      "points": 0,
+                      "createTime": "",
+                      "updateTime": "",
+                      "isDelete": 0
+                    }
+                  ],
+                  "total": 0,
+                  "size": 0,
+                  "current": 0,
+                  "orders": [
+                    {
+                      "column": "",
+                      "asc": false
+                    }
+                  ],
+                  "optimizeCountSql": false,
+                  "searchCount": false,
+                  "optimizeJoinOfCountSql": false,
+                  "countId": "",
+                  "maxLimit": 0
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponsePageUser",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/list/page/vo": {
+      "post": {
+        "summary": "分页获取用户封装列表",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserQueryRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "records": [
+                    {
+                      "id": 0,
+                      "userName": "",
+                      "userAvatar": "",
+                      "userProfile": "",
+                      "userRole": "",
+                      "createTime": ""
+                    }
+                  ],
+                  "total": 0,
+                  "size": 0,
+                  "current": 0,
+                  "orders": [
+                    {
+                      "column": "",
+                      "asc": false
+                    }
+                  ],
+                  "optimizeCountSql": false,
+                  "searchCount": false,
+                  "optimizeJoinOfCountSql": false,
+                  "countId": "",
+                  "maxLimit": 0
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponsePageUserVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/update/my": {
+      "post": {
+        "summary": "更新个人信息",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "用户接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UserUpdateMyRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/appInfo/add": {
+      "post": {
+        "summary": "创建应用管理",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "应用管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AppInfoAddRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": 0,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseLong",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/appInfo/delete": {
+      "post": {
+        "summary": "删除应用管理",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "应用管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/DeleteRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/appInfo/update": {
+      "post": {
+        "summary": "更新应用管理（仅管理员可用）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "应用管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AppInfoUpdateRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/appInfo/get/vo": {
+      "get": {
+        "summary": "根据 id 获取应用管理（封装类）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "应用管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "appId": 0,
+                  "appName": "",
+                  "description": "",
+                  "host": "",
+                  "totalNum": 0,
+                  "deductPoints": 0,
+                  "userId": 0,
+                  "status": 0,
+                  "createTime": "",
+                  "updateTime": "",
+                  "user": {
+                    "id": 0,
+                    "userName": "",
+                    "userAvatar": "",
+                    "userProfile": "",
+                    "userRole": "",
+                    "createTime": ""
+                  }
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseAppInfoVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/appInfo/list/page": {
+      "post": {
+        "summary": "分页获取应用管理列表（仅管理员可用）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "应用管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AppInfoQueryRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "records": [
+                    {
+                      "appId": 0,
+                      "appName": "",
+                      "description": "",
+                      "host": "",
+                      "totalNum": 0,
+                      "deductPoints": 0,
+                      "userId": 0,
+                      "status": 0,
+                      "createTime": "",
+                      "updateTime": "",
+                      "isDelete": 0
+                    }
+                  ],
+                  "total": 0,
+                  "size": 0,
+                  "current": 0,
+                  "orders": [
+                    {
+                      "column": "",
+                      "asc": false
+                    }
+                  ],
+                  "optimizeCountSql": false,
+                  "searchCount": false,
+                  "optimizeJoinOfCountSql": false,
+                  "countId": "",
+                  "maxLimit": 0
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponsePageAppInfo",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/appInfo/list/page/vo": {
+      "post": {
+        "summary": "分页获取应用管理列表（封装类）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "应用管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AppInfoQueryRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "records": [
+                    {
+                      "appId": 0,
+                      "appName": "",
+                      "description": "",
+                      "host": "",
+                      "totalNum": 0,
+                      "deductPoints": 0,
+                      "userId": 0,
+                      "status": 0,
+                      "createTime": "",
+                      "updateTime": "",
+                      "user": {
+                        "id": 0,
+                        "userName": "",
+                        "userAvatar": "",
+                        "userProfile": "",
+                        "userRole": "",
+                        "createTime": ""
+                      }
+                    }
+                  ],
+                  "total": 0,
+                  "size": 0,
+                  "current": 0,
+                  "orders": [
+                    {
+                      "column": "",
+                      "asc": false
+                    }
+                  ],
+                  "optimizeCountSql": false,
+                  "searchCount": false,
+                  "optimizeJoinOfCountSql": false,
+                  "countId": "",
+                  "maxLimit": 0
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponsePageAppInfoVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/appInfo/my/list/page/vo": {
+      "post": {
+        "summary": "分页获取当前登录用户创建的应用管理列表",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "应用管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AppInfoQueryRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "records": [
+                    {
+                      "appId": 0,
+                      "appName": "",
+                      "description": "",
+                      "host": "",
+                      "totalNum": 0,
+                      "deductPoints": 0,
+                      "userId": 0,
+                      "status": 0,
+                      "createTime": "",
+                      "updateTime": "",
+                      "user": {
+                        "id": 0,
+                        "userName": "",
+                        "userAvatar": "",
+                        "userProfile": "",
+                        "userRole": "",
+                        "createTime": ""
+                      }
+                    }
+                  ],
+                  "total": 0,
+                  "size": 0,
+                  "current": 0,
+                  "orders": [
+                    {
+                      "column": "",
+                      "asc": false
+                    }
+                  ],
+                  "optimizeCountSql": false,
+                  "searchCount": false,
+                  "optimizeJoinOfCountSql": false,
+                  "countId": "",
+                  "maxLimit": 0
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponsePageAppInfoVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/appInfo/edit": {
+      "post": {
+        "summary": "编辑应用管理（给用户使用）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "应用管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AppInfoEditRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/interfaceInfo/add": {
+      "post": {
+        "summary": "创建接口管理",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "接口管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterfaceInfoAddRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": 0,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseLong",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/interfaceInfo/delete": {
+      "post": {
+        "summary": "删除接口管理",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "接口管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/DeleteRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/interfaceInfo/update": {
+      "post": {
+        "summary": "更新接口管理（仅管理员可用）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "接口管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterfaceInfoUpdateRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/interfaceInfo/get/vo": {
+      "get": {
+        "summary": "根据 id 获取接口管理（封装类）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "接口管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "id": 0,
+                  "appId": 0,
+                  "name": "",
+                  "description": "",
+                  "url": "",
+                  "requestHeader": "",
+                  "responseHeader": "",
+                  "status": 0,
+                  "method": "",
+                  "userId": 0,
+                  "createTime": "",
+                  "updateTime": "",
+                  "user": {
+                    "id": 0,
+                    "userName": "",
+                    "userAvatar": "",
+                    "userProfile": "",
+                    "userRole": "",
+                    "createTime": ""
+                  }
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseInterfaceInfoVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/interfaceInfo/list/page": {
+      "post": {
+        "summary": "分页获取接口管理列表（仅管理员可用）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "接口管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterfaceInfoQueryRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "records": [
+                    {
+                      "id": 0,
+                      "name": "",
+                      "description": "",
+                      "url": "",
+                      "requestHeader": "",
+                      "responseHeader": "",
+                      "status": 0,
+                      "method": "",
+                      "userId": 0,
+                      "createTime": "",
+                      "updateTime": "",
+                      "isDelete": 0
+                    }
+                  ],
+                  "total": 0,
+                  "size": 0,
+                  "current": 0,
+                  "orders": [
+                    {
+                      "column": "",
+                      "asc": false
+                    }
+                  ],
+                  "optimizeCountSql": false,
+                  "searchCount": false,
+                  "optimizeJoinOfCountSql": false,
+                  "countId": "",
+                  "maxLimit": 0
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponsePageInterfaceInfo",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/interfaceInfo/list/page/vo": {
+      "post": {
+        "summary": "分页获取接口管理列表（封装类）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "接口管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterfaceInfoQueryRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "records": [
+                    {
+                      "id": 0,
+                      "appId": 0,
+                      "name": "",
+                      "description": "",
+                      "url": "",
+                      "requestHeader": "",
+                      "responseHeader": "",
+                      "status": 0,
+                      "method": "",
+                      "userId": 0,
+                      "createTime": "",
+                      "updateTime": "",
+                      "user": {
+                        "id": 0,
+                        "userName": "",
+                        "userAvatar": "",
+                        "userProfile": "",
+                        "userRole": "",
+                        "createTime": ""
+                      }
+                    }
+                  ],
+                  "total": 0,
+                  "size": 0,
+                  "current": 0,
+                  "orders": [
+                    {
+                      "column": "",
+                      "asc": false
+                    }
+                  ],
+                  "optimizeCountSql": false,
+                  "searchCount": false,
+                  "optimizeJoinOfCountSql": false,
+                  "countId": "",
+                  "maxLimit": 0
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponsePageInterfaceInfoVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/interfaceInfo/my/list/page/vo": {
+      "post": {
+        "summary": "分页获取当前登录用户创建的接口管理列表",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "接口管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterfaceInfoQueryRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": {
+                  "records": [
+                    {
+                      "id": 0,
+                      "appId": 0,
+                      "name": "",
+                      "description": "",
+                      "url": "",
+                      "requestHeader": "",
+                      "responseHeader": "",
+                      "status": 0,
+                      "method": "",
+                      "userId": 0,
+                      "createTime": "",
+                      "updateTime": "",
+                      "user": {
+                        "id": 0,
+                        "userName": "",
+                        "userAvatar": "",
+                        "userProfile": "",
+                        "userRole": "",
+                        "createTime": ""
+                      }
+                    }
+                  ],
+                  "total": 0,
+                  "size": 0,
+                  "current": 0,
+                  "orders": [
+                    {
+                      "column": "",
+                      "asc": false
+                    }
+                  ],
+                  "optimizeCountSql": false,
+                  "searchCount": false,
+                  "optimizeJoinOfCountSql": false,
+                  "countId": "",
+                  "maxLimit": 0
+                },
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponsePageInterfaceInfoVO",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/interfaceInfo/edit": {
+      "post": {
+        "summary": "编辑接口管理（给用户使用）",
+        "deprecated": false,
+        "description": "",
+        "tags": [
+          "接口管理接口"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterfaceInfoEditRequest",
+              "description": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "examples": {
+              "application/json": {
+                "code": 0,
+                "data": false,
+                "message": ""
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/BaseResponseBoolean",
+              "description": ""
+            }
+          }
+        },
+        "security": [],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  },
+  "security": [],
+  "swagger": "2.0",
+  "definitions": {
+    "BaseResponseLong": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "BaseResponseBoolean": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "type": "boolean",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "DeleteRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id",
+          "format": "int64"
+        }
+      }
+    },
+    "UserVO": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id",
+          "format": "int64"
+        },
+        "userName": {
+          "type": "string",
+          "description": "用户昵称"
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "用户头像"
+        },
+        "userProfile": {
+          "type": "string",
+          "description": "用户简介"
+        },
+        "userRole": {
+          "type": "string",
+          "description": "用户角色：user/admin/ban"
+        },
+        "createTime": {
+          "type": "string",
+          "description": "创建时间"
+        }
+      }
+    },
+    "OrderItem": {
+      "type": "object",
+      "properties": {
+        "column": {
+          "type": "string",
+          "description": ""
+        },
+        "asc": {
+          "type": "boolean",
+          "description": ""
+        }
+      }
+    },
+    "UserRegisterRequest": {
+      "type": "object",
+      "properties": {
+        "userAccount": {
+          "type": "string",
+          "description": ""
+        },
+        "userPassword": {
+          "type": "string",
+          "description": ""
+        },
+        "checkPassword": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "LoginUserVO": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "用户 id",
+          "format": "int64"
+        },
+        "userName": {
+          "type": "string",
+          "description": "用户昵称"
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "用户头像"
+        },
+        "userProfile": {
+          "type": "string",
+          "description": "用户简介"
+        },
+        "userRole": {
+          "type": "string",
+          "description": "用户角色：user/admin/ban"
+        },
+        "createTime": {
+          "type": "string",
+          "description": "创建时间"
+        },
+        "updateTime": {
+          "type": "string",
+          "description": "更新时间"
+        }
+      }
+    },
+    "BaseResponseLoginUserVO": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/LoginUserVO",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "UserLoginRequest": {
+      "type": "object",
+      "properties": {
+        "userAccount": {
+          "type": "string",
+          "description": ""
+        },
+        "userPassword": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "UserAddRequest": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string",
+          "description": "用户昵称"
+        },
+        "userAccount": {
+          "type": "string",
+          "description": "账号"
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "用户头像"
+        },
+        "accessKey": {
+          "type": "string",
+          "description": "accessKey"
+        },
+        "secretKey": {
+          "type": "string",
+          "description": "secretKey"
+        },
+        "points": {
+          "type": "integer",
+          "description": "积分"
+        },
+        "userRole": {
+          "type": "string",
+          "description": "用户角色: user, admin"
+        }
+      }
+    },
+    "UserUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id",
+          "format": "int64"
+        },
+        "userName": {
+          "type": "string",
+          "description": "用户昵称"
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "用户头像"
+        },
+        "userProfile": {
+          "type": "string",
+          "description": "简介"
+        },
+        "userRole": {
+          "type": "string",
+          "description": "用户角色：user/admin/ban"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id",
+          "format": "int64"
+        },
+        "userAccount": {
+          "type": "string",
+          "description": "用户账号"
+        },
+        "userPassword": {
+          "type": "string",
+          "description": "用户密码"
+        },
+        "unionId": {
+          "type": "string",
+          "description": "开放平台id"
+        },
+        "mpOpenId": {
+          "type": "string",
+          "description": "公众号openId"
+        },
+        "userName": {
+          "type": "string",
+          "description": "用户昵称"
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "用户头像"
+        },
+        "userProfile": {
+          "type": "string",
+          "description": "用户简介"
+        },
+        "userRole": {
+          "type": "string",
+          "description": "用户角色：user/admin/ban"
+        },
+        "status": {
+          "type": "integer",
+          "description": "状态 0-正常 1-封禁"
+        },
+        "accessKey": {
+          "type": "string",
+          "description": "accessKey"
+        },
+        "secretKey": {
+          "type": "string",
+          "description": "secretKey"
+        },
+        "points": {
+          "type": "integer",
+          "description": "积分"
+        },
+        "createTime": {
+          "type": "string",
+          "description": "创建时间"
+        },
+        "updateTime": {
+          "type": "string",
+          "description": "更新时间"
+        },
+        "isDelete": {
+          "type": "integer",
+          "description": "是否删除"
+        }
+      }
+    },
+    "BaseResponseUser": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/User",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "BaseResponseUserVO": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/UserVO",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "PageUser": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User",
+            "description": "用户"
+          },
+          "description": ""
+        },
+        "total": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "size": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "current": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem",
+            "description": "com.baomidou.mybatisplus.core.metadata.OrderItem"
+          },
+          "description": ""
+        },
+        "optimizeCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "searchCount": {
+          "type": "boolean",
+          "description": ""
+        },
+        "optimizeJoinOfCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "countId": {
+          "type": "string",
+          "description": ""
+        },
+        "maxLimit": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        }
+      }
+    },
+    "BaseResponsePageUser": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/PageUser",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "UserQueryRequest": {
+      "type": "object",
+      "properties": {
+        "current": {
+          "type": "integer",
+          "description": "当前页号",
+          "default": 1
+        },
+        "pageSize": {
+          "type": "integer",
+          "description": "页面大小",
+          "default": 10
+        },
+        "sortField": {
+          "type": "string",
+          "description": "排序字段"
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "排序顺序（默认升序）",
+          "default": "ascend"
+        },
+        "id": {
+          "type": "integer",
+          "description": "id",
+          "format": "int64"
+        },
+        "unionId": {
+          "type": "string",
+          "description": "开放平台id"
+        },
+        "mpOpenId": {
+          "type": "string",
+          "description": "公众号openId"
+        },
+        "userName": {
+          "type": "string",
+          "description": "用户昵称"
+        },
+        "userProfile": {
+          "type": "string",
+          "description": "简介"
+        },
+        "accessKey": {
+          "type": "string",
+          "description": "accessKey"
+        },
+        "secretKey": {
+          "type": "string",
+          "description": "secretKey"
+        },
+        "points": {
+          "type": "integer",
+          "description": "积分"
+        },
+        "userRole": {
+          "type": "string",
+          "description": "用户角色：user/admin/ban"
+        }
+      }
+    },
+    "PageUserVO": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserVO",
+            "description": "用户视图（脱敏）"
+          },
+          "description": ""
+        },
+        "total": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "size": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "current": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem",
+            "description": "com.baomidou.mybatisplus.core.metadata.OrderItem"
+          },
+          "description": ""
+        },
+        "optimizeCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "searchCount": {
+          "type": "boolean",
+          "description": ""
+        },
+        "optimizeJoinOfCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "countId": {
+          "type": "string",
+          "description": ""
+        },
+        "maxLimit": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        }
+      }
+    },
+    "BaseResponsePageUserVO": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/PageUserVO",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "UserUpdateMyRequest": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string",
+          "description": "用户昵称"
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "用户头像"
+        },
+        "userProfile": {
+          "type": "string",
+          "description": "简介"
+        }
+      }
+    },
+    "AppInfoAddRequest": {
+      "type": "object",
+      "properties": {
+        "appName": {
+          "type": "string",
+          "description": "应用名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "应用描述"
+        },
+        "host": {
+          "type": "string",
+          "description": "接口主机地址（网关地址）"
+        },
+        "deductPoints": {
+          "type": "integer",
+          "description": "调用扣除积分数"
+        },
+        "status": {
+          "type": "integer",
+          "description": "状态（0-禁用，1-启用）"
+        }
+      }
+    },
+    "AppInfoUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "integer",
+          "description": "应用ID（主键）",
+          "format": "int64"
+        },
+        "appName": {
+          "type": "string",
+          "description": "应用名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "应用描述"
+        },
+        "host": {
+          "type": "string",
+          "description": "接口主机地址（网关地址）"
+        },
+        "deductPoints": {
+          "type": "integer",
+          "description": "扣除积分数"
+        },
+        "userId": {
+          "type": "integer",
+          "description": "创建用户ID",
+          "format": "int64"
+        },
+        "status": {
+          "type": "integer",
+          "description": "状态（0-禁用，1-启用）"
+        }
+      }
+    },
+    "AppInfoVO": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "integer",
+          "description": "id",
+          "format": "int64"
+        },
+        "appName": {
+          "type": "string",
+          "description": "应用名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "应用描述"
+        },
+        "host": {
+          "type": "string",
+          "description": "接口主机地址（网关地址）"
+        },
+        "totalNum": {
+          "type": "integer",
+          "description": "总调用次数"
+        },
+        "deductPoints": {
+          "type": "integer",
+          "description": "调用扣除积分"
+        },
+        "userId": {
+          "type": "integer",
+          "description": "创建用户ID",
+          "format": "int64"
+        },
+        "status": {
+          "type": "integer",
+          "description": "状态（0-禁用，1-启用）"
+        },
+        "createTime": {
+          "type": "string",
+          "description": "创建时间"
+        },
+        "updateTime": {
+          "type": "string",
+          "description": "更新时间"
+        },
+        "user": {
+          "$ref": "#/definitions/UserVO",
+          "description": "创建用户信息"
+        }
+      }
+    },
+    "BaseResponseAppInfoVO": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/AppInfoVO",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "AppInfo": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "integer",
+          "description": "应用ID（主键）",
+          "format": "int64"
+        },
+        "appName": {
+          "type": "string",
+          "description": "应用名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "应用描述"
+        },
+        "host": {
+          "type": "string",
+          "description": "接口主机地址（网关地址）"
+        },
+        "totalNum": {
+          "type": "integer",
+          "description": "总调用次数"
+        },
+        "deductPoints": {
+          "type": "integer",
+          "description": "调用扣除积分"
+        },
+        "userId": {
+          "type": "integer",
+          "description": "创建用户ID",
+          "format": "int64"
+        },
+        "status": {
+          "type": "integer",
+          "description": "状态（0-禁用，1-启用）"
+        },
+        "createTime": {
+          "type": "string",
+          "description": "创建时间"
+        },
+        "updateTime": {
+          "type": "string",
+          "description": "更新时间"
+        },
+        "isDelete": {
+          "type": "integer",
+          "description": "是否删除(0-正常，1-删除)"
+        }
+      }
+    },
+    "PageAppInfo": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppInfo",
+            "description": "接口应用表"
+          },
+          "description": ""
+        },
+        "total": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "size": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "current": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem",
+            "description": "com.baomidou.mybatisplus.core.metadata.OrderItem"
+          },
+          "description": ""
+        },
+        "optimizeCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "searchCount": {
+          "type": "boolean",
+          "description": ""
+        },
+        "optimizeJoinOfCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "countId": {
+          "type": "string",
+          "description": ""
+        },
+        "maxLimit": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        }
+      }
+    },
+    "BaseResponsePageAppInfo": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/PageAppInfo",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "AppInfoQueryRequest": {
+      "type": "object",
+      "properties": {
+        "current": {
+          "type": "integer",
+          "description": "当前页号",
+          "default": 1
+        },
+        "pageSize": {
+          "type": "integer",
+          "description": "页面大小",
+          "default": 10
+        },
+        "sortField": {
+          "type": "string",
+          "description": "排序字段"
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "排序顺序（默认升序）",
+          "default": "ascend"
+        },
+        "appId": {
+          "type": "integer",
+          "description": "应用ID（主键）",
+          "format": "int64"
+        },
+        "appName": {
+          "type": "string",
+          "description": "应用名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "应用描述"
+        },
+        "host": {
+          "type": "string",
+          "description": "接口主机地址（网关地址）"
+        },
+        "deductPoints": {
+          "type": "integer",
+          "description": "扣除积分数"
+        },
+        "userId": {
+          "type": "integer",
+          "description": "创建用户ID",
+          "format": "int64"
+        },
+        "notId": {
+          "type": "integer",
+          "description": "id",
+          "format": "int64"
+        },
+        "searchText": {
+          "type": "string",
+          "description": "搜索词"
+        }
+      }
+    },
+    "PageAppInfoVO": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AppInfoVO",
+            "description": "应用管理视图"
+          },
+          "description": ""
+        },
+        "total": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "size": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "current": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem",
+            "description": "com.baomidou.mybatisplus.core.metadata.OrderItem"
+          },
+          "description": ""
+        },
+        "optimizeCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "searchCount": {
+          "type": "boolean",
+          "description": ""
+        },
+        "optimizeJoinOfCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "countId": {
+          "type": "string",
+          "description": ""
+        },
+        "maxLimit": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        }
+      }
+    },
+    "BaseResponsePageAppInfoVO": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/PageAppInfoVO",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "AppInfoEditRequest": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "integer",
+          "description": "应用ID（主键）",
+          "format": "int64"
+        },
+        "appName": {
+          "type": "string",
+          "description": "应用名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "应用描述"
+        },
+        "host": {
+          "type": "string",
+          "description": "接口主机地址（网关地址）"
+        },
+        "deductPoints": {
+          "type": "integer",
+          "description": "扣除积分数"
+        },
+        "status": {
+          "type": "integer",
+          "description": "状态（0-禁用，1-启用）"
+        }
+      }
+    },
+    "InterfaceInfoAddRequest": {
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "integer",
+          "description": "应用 id"
+        },
+        "name": {
+          "type": "string",
+          "description": "名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "描述"
+        },
+        "url": {
+          "type": "string",
+          "description": "接口地址"
+        },
+        "requestHeader": {
+          "type": "string",
+          "description": "请求头"
+        },
+        "responseHeader": {
+          "type": "string",
+          "description": "响应头"
+        },
+        "status": {
+          "type": "integer",
+          "description": "接口状态（0-关闭，1-开启）"
+        },
+        "method": {
+          "type": "string",
+          "description": "请求类型"
+        }
+      }
+    },
+    "InterfaceInfoUpdateRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "appId": {
+          "type": "integer",
+          "description": ""
+        },
+        "name": {
+          "type": "string",
+          "description": "名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "描述"
+        },
+        "url": {
+          "type": "string",
+          "description": "接口地址"
+        },
+        "requestHeader": {
+          "type": "string",
+          "description": "请求头"
+        },
+        "responseHeader": {
+          "type": "string",
+          "description": "响应头"
+        },
+        "status": {
+          "type": "integer",
+          "description": "接口状态（0-关闭，1-开启）"
+        },
+        "method": {
+          "type": "string",
+          "description": "请求类型"
+        },
+        "userId": {
+          "type": "integer",
+          "description": "创建人",
+          "format": "int64"
+        }
+      }
+    },
+    "InterfaceInfoVO": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "appId": {
+          "type": "integer",
+          "description": ""
+        },
+        "name": {
+          "type": "string",
+          "description": "名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "描述"
+        },
+        "url": {
+          "type": "string",
+          "description": "接口地址"
+        },
+        "requestHeader": {
+          "type": "string",
+          "description": "请求头"
+        },
+        "responseHeader": {
+          "type": "string",
+          "description": "响应头"
+        },
+        "status": {
+          "type": "integer",
+          "description": "接口状态（0-关闭，1-开启）"
+        },
+        "method": {
+          "type": "string",
+          "description": "请求类型"
+        },
+        "userId": {
+          "type": "integer",
+          "description": "创建人",
+          "format": "int64"
+        },
+        "createTime": {
+          "type": "string",
+          "description": "创建时间"
+        },
+        "updateTime": {
+          "type": "string",
+          "description": "更新时间"
+        },
+        "user": {
+          "$ref": "#/definitions/UserVO",
+          "description": "创建用户信息"
+        }
+      }
+    },
+    "BaseResponseInterfaceInfoVO": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/InterfaceInfoVO",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "InterfaceInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "主键",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "description": "名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "描述"
+        },
+        "url": {
+          "type": "string",
+          "description": "接口地址"
+        },
+        "requestHeader": {
+          "type": "string",
+          "description": "请求头"
+        },
+        "responseHeader": {
+          "type": "string",
+          "description": "响应头"
+        },
+        "status": {
+          "type": "integer",
+          "description": "接口状态（0-关闭，1-开启）"
+        },
+        "method": {
+          "type": "string",
+          "description": "请求类型"
+        },
+        "userId": {
+          "type": "integer",
+          "description": "创建人",
+          "format": "int64"
+        },
+        "createTime": {
+          "type": "string",
+          "description": "创建时间"
+        },
+        "updateTime": {
+          "type": "string",
+          "description": "更新时间"
+        },
+        "isDelete": {
+          "type": "integer",
+          "description": "是否删除(0-未删, 1-已删)"
+        }
+      }
+    },
+    "PageInterfaceInfo": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InterfaceInfo",
+            "description": "接口信息"
+          },
+          "description": ""
+        },
+        "total": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "size": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "current": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem",
+            "description": "com.baomidou.mybatisplus.core.metadata.OrderItem"
+          },
+          "description": ""
+        },
+        "optimizeCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "searchCount": {
+          "type": "boolean",
+          "description": ""
+        },
+        "optimizeJoinOfCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "countId": {
+          "type": "string",
+          "description": ""
+        },
+        "maxLimit": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        }
+      }
+    },
+    "BaseResponsePageInterfaceInfo": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/PageInterfaceInfo",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "InterfaceInfoQueryRequest": {
+      "type": "object",
+      "properties": {
+        "current": {
+          "type": "integer",
+          "description": "当前页号",
+          "default": 1
+        },
+        "pageSize": {
+          "type": "integer",
+          "description": "页面大小",
+          "default": 10
+        },
+        "sortField": {
+          "type": "string",
+          "description": "排序字段"
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "排序顺序（默认升序）",
+          "default": "ascend"
+        },
+        "id": {
+          "type": "integer",
+          "description": "主键",
+          "format": "int64"
+        },
+        "appId": {
+          "type": "integer",
+          "description": ""
+        },
+        "name": {
+          "type": "string",
+          "description": "名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "描述"
+        },
+        "requestHeader": {
+          "type": "string",
+          "description": "请求头"
+        },
+        "responseHeader": {
+          "type": "string",
+          "description": "响应头"
+        },
+        "status": {
+          "type": "integer",
+          "description": "接口状态（0-关闭，1-开启）"
+        },
+        "method": {
+          "type": "string",
+          "description": "请求类型"
+        },
+        "userId": {
+          "type": "integer",
+          "description": "创建人",
+          "format": "int64"
+        },
+        "createTime": {
+          "type": "string",
+          "description": "创建时间"
+        },
+        "updateTime": {
+          "type": "string",
+          "description": "更新时间"
+        },
+        "notId": {
+          "type": "integer",
+          "description": "id",
+          "format": "int64"
+        },
+        "searchText": {
+          "type": "string",
+          "description": "搜索词"
+        }
+      }
+    },
+    "PageInterfaceInfoVO": {
+      "type": "object",
+      "properties": {
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InterfaceInfoVO",
+            "description": "接口管理视图"
+          },
+          "description": ""
+        },
+        "total": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "size": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "current": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        },
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem",
+            "description": "com.baomidou.mybatisplus.core.metadata.OrderItem"
+          },
+          "description": ""
+        },
+        "optimizeCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "searchCount": {
+          "type": "boolean",
+          "description": ""
+        },
+        "optimizeJoinOfCountSql": {
+          "type": "boolean",
+          "description": ""
+        },
+        "countId": {
+          "type": "string",
+          "description": ""
+        },
+        "maxLimit": {
+          "type": "integer",
+          "description": "",
+          "format": "int64"
+        }
+      }
+    },
+    "BaseResponsePageInterfaceInfoVO": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": ""
+        },
+        "data": {
+          "$ref": "#/definitions/PageInterfaceInfoVO",
+          "description": ""
+        },
+        "message": {
+          "type": "string",
+          "description": ""
+        }
+      }
+    },
+    "InterfaceInfoEditRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "主键",
+          "format": "int64"
+        },
+        "appId": {
+          "type": "integer",
+          "description": ""
+        },
+        "name": {
+          "type": "string",
+          "description": "名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "描述"
+        },
+        "url": {
+          "type": "string",
+          "description": "接口地址"
+        },
+        "requestHeader": {
+          "type": "string",
+          "description": "请求头"
+        },
+        "responseHeader": {
+          "type": "string",
+          "description": "响应头"
+        },
+        "status": {
+          "type": "integer",
+          "description": "接口状态（0-关闭，1-开启）"
+        },
+        "method": {
+          "type": "string",
+          "description": "请求类型"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {},
+  "x-components": {
+    "responses": {}
+  }
+}
