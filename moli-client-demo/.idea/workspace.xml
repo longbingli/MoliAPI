@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d6e11c27-dfd9-4897-a37c-ac98f9c049d4" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/../moli-api-web/api-web/config/proxy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moli-api-web/api-web/config/proxy.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../moli-api-web/api-web/src/app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../moli-api-web/api-web/src/app.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../moli-api-web/api-web/src/components/RightContent/AvatarDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../moli-api-web/api-web/src/components/RightContent/AvatarDropdown.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../moli-api-web/api-web/src/pages/user/login/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../moli-api-web/api-web/src/pages/user/login/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../moli-api-web/api-web/src/requestErrorConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moli-api-web/api-web/src/requestErrorConfig.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../moli-api-web/api-web/src/services/ant-design-pro/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moli-api-web/api-web/src/services/ant-design-pro/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../moli-api-web/api-web/src/services/ant-design-pro/typings.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moli-api-web/api-web/src/services/ant-design-pro/typings.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../moli-api-web/api-web/src/typings.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../moli-api-web/api-web/src/typings.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="d6e11c27-dfd9-4897-a37c-ac98f9c049d4" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,26 +51,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.moli-client-demo [org.apache.maven.plugins:maven-clean-plugin:3.4.1:clean].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.MoliClientDemoApplication.executor": "Run",
-    "git-widget-placeholder": "codex/api-web-submit-20260327",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "MavenSettings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.moli-client-demo [org.apache.maven.plugins:maven-clean-plugin:3.4.1:clean].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.MoliClientDemoApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;codex/api-web-submit-20260327&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="MoliClientDemoApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="moli-client-demo" />
@@ -124,8 +114,32 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="codex/api-web-submit-20260327" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat(project): 初始化moliapi客户端演示项目&#10;&#10;- 添加 Apifox 上传器项目配置文件&#10;- 配置 Spring Boot 应用程序属性包括访问密钥、网关主机和端口设置&#10;- 创建编译器配置支持注解处理器和参数编译&#10;- 实现 DemoController 提供诗歌随机请求接口&#10;- 设置 Java 编码为 UTF-8&#10;- 配置 Maven 远程仓库包括中央仓库和阿里云镜像&#10;- 添加项目根目录管理配置指定 JDK 17&#10;- 创建主应用程序入口类 MoliClientDemoApplication&#10;- 添加 Spring Boot 测试类验证上下文加载&#10;- 配置 Maven POM 文件定义项目依赖和插件&#10;- 添加 UI 设计器组件配置文件&#10;- 配置 Git 版本控制映射&#10;- 设置 IDE 工作空间配置包括自动导入和问题视图" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(project): 初始化moliapi客户端演示项目&#10;&#10;- 添加 Apifox 上传器项目配置文件&#10;- 配置 Spring Boot 应用程序属性包括访问密钥、网关主机和端口设置&#10;- 创建编译器配置支持注解处理器和参数编译&#10;- 实现 DemoController 提供诗歌随机请求接口&#10;- 设置 Java 编码为 UTF-8&#10;- 配置 Maven 远程仓库包括中央仓库和阿里云镜像&#10;- 添加项目根目录管理配置指定 JDK 17&#10;- 创建主应用程序入口类 MoliClientDemoApplication&#10;- 添加 Spring Boot 测试类验证上下文加载&#10;- 配置 Maven POM 文件定义项目依赖和插件&#10;- 添加 UI 设计器组件配置文件&#10;- 配置 Git 版本控制映射&#10;- 设置 IDE 工作空间配置包括自动导入和问题视图" />
+    <MESSAGE value="fix(user): 优化用户服务访问密钥验证逻辑&#10;&#10;- 添加序列化接口实现和版本号标识到实体类&#10;- 配置 Dubbo 消费者超时时间和重试次数&#10;- 实现访问密钥标准化处理和空值检查&#10;- 添加加密访问密钥兼容性匹配逻辑&#10;- 优化查询条件支持状态字段空值情况&#10;- 增加详细日志记录用于调试和监控&#10;- 修复 Demo 控制器中诗歌接口路径错误" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(user): 优化用户服务访问密钥验证逻辑&#10;&#10;- 添加序列化接口实现和版本号标识到实体类&#10;- 配置 Dubbo 消费者超时时间和重试次数&#10;- 实现访问密钥标准化处理和空值检查&#10;- 添加加密访问密钥兼容性匹配逻辑&#10;- 优化查询条件支持状态字段空值情况&#10;- 增加详细日志记录用于调试和监控&#10;- 修复 Demo 控制器中诗歌接口路径错误" />
   </component>
 </project>
