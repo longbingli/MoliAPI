@@ -101,6 +101,7 @@ const Home: React.FC = () => {
 
   const goToInterfaceList = (app: API.AppInfoVO) => {
     const appId = app.appId;
+    const gatewayHost = app.gatewayHost || app.host;
     if (!appId) {
       return;
     }
@@ -109,8 +110,8 @@ const Home: React.FC = () => {
     if (app.appName) {
       search.set('appName', app.appName);
     }
-    if (app.host) {
-      search.set('host', app.host);
+    if (gatewayHost) {
+      search.set('gatewayHost', gatewayHost);
     }
     if (app.description) {
       search.set('appDescription', app.description);
@@ -206,15 +207,15 @@ const Home: React.FC = () => {
                     {app.description || '暂无描述'}
                   </Typography.Paragraph>
                   <Typography.Paragraph style={{ marginBottom: 8 }}>
-                    <strong>主机地址：</strong>
-                    {app.host || '未配置'}
+                    <strong>网关地址：</strong>
+                    {app.gatewayHost || app.host || '未配置'}
                   </Typography.Paragraph>
                   <Typography.Paragraph style={{ marginBottom: 8 }}>
                     <strong>总调用次数：</strong>
                     {app.totalNum ?? 0}
                   </Typography.Paragraph>
                   <Typography.Paragraph style={{ marginBottom: 0 }}>
-                    <strong>单次扣分：</strong>
+                    <strong>调用积分：</strong>
                     {app.deductPoints ?? 0}
                   </Typography.Paragraph>
                 </Card>

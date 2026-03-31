@@ -54,6 +54,7 @@ declare namespace API {
     appId?: number | string;
     appName?: string;
     description?: string;
+    gatewayHost?: string;
     host?: string;
     totalNum?: number;
     deductPoints?: number;
@@ -71,6 +72,7 @@ declare namespace API {
     appId?: number | string;
     appName?: string;
     description?: string;
+    gatewayHost?: string;
     host?: string;
     deductPoints?: number;
     userId?: number | string;

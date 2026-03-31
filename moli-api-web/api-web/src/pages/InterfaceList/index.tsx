@@ -62,7 +62,7 @@ const InterfaceListPage: React.FC = () => {
 
   const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const appName = query.get('appName') || `应用 #${appId}`;
-  const appHost = query.get('host') || '';
+  const appGatewayHost = query.get('gatewayHost') || query.get('host') || '';
   const appDescription = query.get('appDescription') || '';
   const appDeductPoints = query.get('deductPoints') || '';
   const appTotalNum = query.get('totalNum') || '';
@@ -125,8 +125,8 @@ const InterfaceListPage: React.FC = () => {
 
     const params = new URLSearchParams();
     params.set('appName', appName);
-    if (appHost) {
-      params.set('host', appHost);
+    if (appGatewayHost) {
+      params.set('gatewayHost', appGatewayHost);
     }
     if (item.name) {
       params.set('interfaceName', item.name);
@@ -166,7 +166,7 @@ const InterfaceListPage: React.FC = () => {
       <Card style={{ marginBottom: 16 }}>
         <Space direction="vertical" style={{ width: '100%' }} size={12}>
           <Typography.Text type="secondary">应用 ID：{appId}</Typography.Text>
-          <Typography.Text type="secondary">网关地址：{appHost || '未传递'}</Typography.Text>
+          <Typography.Text type="secondary">网关地址：{appGatewayHost || '未传递'}</Typography.Text>
           <Space wrap>
             <Input
               value={searchText}

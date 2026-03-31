@@ -153,9 +153,11 @@ const InterfaceDetailPage: React.FC = () => {
   const location = useLocation();
   const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const appName = query.get('appName') || `应用 #${appId}`;
-  const appHost = query.get('host') || '';
+  const appGatewayHost = query.get('gatewayHost') || query.get('host') || '';
+  const appDescription = query.get('appDescription') || '';
   const appDeductPoints = query.get('deductPoints') || '-';
   const appTotalNum = query.get('totalNum') || '-';
+  const appStatus = query.get('appStatus') || '';
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -314,7 +316,8 @@ fetch("${baseUrl}${path}", {
   .then(console.log)
   .catch(console.error);`;
 
-  const gatewayAddress = appHost || (/^https?:\/\//i.test(baseUrl) ? baseUrl : window.location.origin);
+  const gatewayAddress =
+    appGatewayHost || (/^https?:\/\//i.test(baseUrl) ? baseUrl : window.location.origin);
   const interfaceAddress = info?.url || `${baseUrl}${path}`;
   const interfaceStatus = `${info?.status ?? ''}` === '1' ? '开启' : '关闭';
   const interfaceDescription = info?.description || '暂无描述';
@@ -327,7 +330,26 @@ fetch("${baseUrl}${path}", {
         <Button
           key="back"
           icon={<ArrowLeftOutlined />}
-          onClick={() => history.push(`/apps/${appId}/interfaces?appName=${encodeURIComponent(appName)}`)}
+          onClick={() => {
+            const params = new URLSearchParams();
+            params.set('appName', appName);
+            if (appGatewayHost) {
+              params.set('gatewayHost', appGatewayHost);
+            }
+            if (appDescription) {
+              params.set('appDescription', appDescription);
+            }
+            if (appDeductPoints !== '-') {
+              params.set('deductPoints', appDeductPoints);
+            }
+            if (appTotalNum !== '-') {
+              params.set('totalNum', appTotalNum);
+            }
+            if (appStatus) {
+              params.set('appStatus', appStatus);
+            }
+            history.push(`/apps/${appId}/interfaces?${params.toString()}`);
+          }}
         >
           返回接口列表
         </Button>,
@@ -347,7 +369,7 @@ fetch("${baseUrl}${path}", {
           <Descriptions.Item label="返回格式">
             <Tag color="processing">JSON</Tag>
           </Descriptions.Item>
-          <Descriptions.Item label="消费积分">{appDeductPoints}</Descriptions.Item>
+          <Descriptions.Item label="调用积分">{appDeductPoints}</Descriptions.Item>
           <Descriptions.Item label="调用总次数">{appTotalNum}</Descriptions.Item>
           <Descriptions.Item label="接口状态">
             <Tag color={interfaceStatus === '开启' ? 'green' : 'default'}>{interfaceStatus}</Tag>
