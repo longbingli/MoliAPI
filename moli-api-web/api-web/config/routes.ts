@@ -23,6 +23,12 @@
     component: './AccountCenter',
   },
   {
+    path: '/account/token',
+    name: '令牌管理',
+    icon: 'key',
+    component: './TokenManage',
+  },
+  {
     path: '/apps/:appId/interfaces',
     component: './InterfaceList',
   },
