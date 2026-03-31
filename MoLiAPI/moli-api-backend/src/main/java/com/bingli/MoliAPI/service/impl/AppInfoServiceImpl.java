@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,6 +40,9 @@ public class AppInfoServiceImpl extends ServiceImpl<AppInfoMapper, AppInfo> impl
 
     @Resource
     private UserService userService;
+
+    @Value("${moli.client.gateway-host}")
+    private String gatewayHost;
 
     /**
      * 校验数据
@@ -142,7 +146,7 @@ public class AppInfoServiceImpl extends ServiceImpl<AppInfoMapper, AppInfo> impl
     public AppInfoVO getAppInfoVO(AppInfo appInfo, HttpServletRequest request) {
         // 对象转封装类
         AppInfoVO appInfoVO = AppInfoVO.objToVo(appInfo);
-
+        appInfoVO.setGatewayHost(gatewayHost);
         // region 可选
         // 1. 关联查询用户信息
         Long userId = appInfo.getUserId();
@@ -167,13 +171,22 @@ public class AppInfoServiceImpl extends ServiceImpl<AppInfoMapper, AppInfo> impl
     @Override
     public Page<AppInfoVO> getAppInfoVOPage(Page<AppInfo> appInfoPage, HttpServletRequest request) {
         List<AppInfo> appInfoList = appInfoPage.getRecords();
+
+
         Page<AppInfoVO> appInfoVOPage = new Page<>(appInfoPage.getCurrent(), appInfoPage.getSize(), appInfoPage.getTotal());
         if (CollUtil.isEmpty(appInfoList)) {
             return appInfoVOPage;
         }
         // 对象列表 => 封装对象列表
+//        List<AppInfoVO> appInfoVOList = appInfoList.stream().map(appInfo -> {
+//            return AppInfoVO.objToVo(appInfo);
+//        }).collect(Collectors.toList());
+
+
         List<AppInfoVO> appInfoVOList = appInfoList.stream().map(appInfo -> {
-            return AppInfoVO.objToVo(appInfo);
+            AppInfoVO appInfoVO = AppInfoVO.objToVo(appInfo);
+            appInfoVO.setGatewayHost(gatewayHost);
+            return appInfoVO;
         }).collect(Collectors.toList());
 
         // region 可选

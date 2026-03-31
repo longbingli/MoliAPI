@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.bingli.MoliAPI.model.entity.AppInfo;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -34,7 +35,10 @@ public class AppInfoVO implements Serializable {
     /**
      * 接口主机地址（网关地址）
      */
-    private String host;
+
+    private String gatewayHost;
+
+//    private String host;
     /**
      * 总调用次数
      */
@@ -52,6 +56,7 @@ public class AppInfoVO implements Serializable {
      * 状态（0-禁用，1-启用）
      */
     private Integer status;
+
 
     /**
      * 创建时间

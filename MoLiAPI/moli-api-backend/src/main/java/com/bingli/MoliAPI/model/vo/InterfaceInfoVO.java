@@ -62,6 +62,8 @@ public class InterfaceInfoVO implements Serializable {
      */
     private String returnFormat;
 
+    private Integer totalNum;
+
     /**
      * 接口状态（1-关闭，0-开启）
      */

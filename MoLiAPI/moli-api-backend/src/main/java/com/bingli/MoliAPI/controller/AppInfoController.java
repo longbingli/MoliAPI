@@ -173,6 +173,7 @@ public class AppInfoController {
         // 查询数据库
         Page<AppInfo> appInfoPage = appInfoService.page(new Page<>(current, size),
                 appInfoService.getQueryWrapper(appInfoQueryRequest));
+
         // 获取封装类
         return ResultUtils.success(appInfoService.getAppInfoVOPage(appInfoPage, request));
     }
