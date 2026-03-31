@@ -112,6 +112,18 @@ const Home: React.FC = () => {
     if (app.host) {
       search.set('host', app.host);
     }
+    if (app.description) {
+      search.set('appDescription', app.description);
+    }
+    if (app.deductPoints !== undefined && app.deductPoints !== null) {
+      search.set('deductPoints', String(app.deductPoints));
+    }
+    if (app.totalNum !== undefined && app.totalNum !== null) {
+      search.set('totalNum', String(app.totalNum));
+    }
+    if (app.status !== undefined && app.status !== null) {
+      search.set('appStatus', String(app.status));
+    }
 
     const searchText = search.toString();
     history.push(`/apps/${appId}/interfaces${searchText ? `?${searchText}` : ''}`);

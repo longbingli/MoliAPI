@@ -14,6 +14,7 @@ import {
   Button,
   Card,
   Col,
+  Descriptions,
   Input,
   Row,
   Select,
@@ -152,6 +153,9 @@ const InterfaceDetailPage: React.FC = () => {
   const location = useLocation();
   const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const appName = query.get('appName') || `应用 #${appId}`;
+  const appHost = query.get('host') || '';
+  const appDeductPoints = query.get('deductPoints') || '-';
+  const appTotalNum = query.get('totalNum') || '-';
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -310,6 +314,11 @@ fetch("${baseUrl}${path}", {
   .then(console.log)
   .catch(console.error);`;
 
+  const gatewayAddress = appHost || (/^https?:\/\//i.test(baseUrl) ? baseUrl : window.location.origin);
+  const interfaceAddress = info?.url || `${baseUrl}${path}`;
+  const interfaceStatus = `${info?.status ?? ''}` === '1' ? '开启' : '关闭';
+  const interfaceDescription = info?.description || '暂无描述';
+
   return (
     <PageContainer
       title="接口详情"
@@ -328,11 +337,25 @@ fetch("${baseUrl}${path}", {
       ]}
     >
       <Card style={{ marginBottom: 16 }}>
-        <Space size={12} wrap>
+        <Space size={12} wrap style={{ marginBottom: 12 }}>
           <Typography.Text type="secondary">应用：{appName}</Typography.Text>
           <Tag color="blue">{method}</Tag>
-          <Typography.Text>{info?.url || `${baseUrl}${path}`}</Typography.Text>
         </Space>
+        <Descriptions column={{ xs: 1, sm: 1, md: 2 }} size="small">
+          <Descriptions.Item label="接口地址">{interfaceAddress}</Descriptions.Item>
+          <Descriptions.Item label="网关地址">{gatewayAddress}</Descriptions.Item>
+          <Descriptions.Item label="返回格式">
+            <Tag color="processing">JSON</Tag>
+          </Descriptions.Item>
+          <Descriptions.Item label="消费积分">{appDeductPoints}</Descriptions.Item>
+          <Descriptions.Item label="调用总次数">{appTotalNum}</Descriptions.Item>
+          <Descriptions.Item label="接口状态">
+            <Tag color={interfaceStatus === '开启' ? 'green' : 'default'}>{interfaceStatus}</Tag>
+          </Descriptions.Item>
+          <Descriptions.Item label="接口描述" span={2}>
+            {interfaceDescription}
+          </Descriptions.Item>
+        </Descriptions>
       </Card>
 
       {errorMessage ? <Alert type="error" showIcon message={errorMessage} style={{ marginBottom: 16 }} /> : null}

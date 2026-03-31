@@ -63,6 +63,10 @@ const InterfaceListPage: React.FC = () => {
   const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const appName = query.get('appName') || `应用 #${appId}`;
   const appHost = query.get('host') || '';
+  const appDescription = query.get('appDescription') || '';
+  const appDeductPoints = query.get('deductPoints') || '';
+  const appTotalNum = query.get('totalNum') || '';
+  const appStatus = query.get('appStatus') || '';
 
   const fetchInterfaces = useCallback(
     async (nextKeyword = '') => {
@@ -126,6 +130,18 @@ const InterfaceListPage: React.FC = () => {
     }
     if (item.name) {
       params.set('interfaceName', item.name);
+    }
+    if (appDescription) {
+      params.set('appDescription', appDescription);
+    }
+    if (appDeductPoints) {
+      params.set('deductPoints', appDeductPoints);
+    }
+    if (appTotalNum) {
+      params.set('totalNum', appTotalNum);
+    }
+    if (appStatus) {
+      params.set('appStatus', appStatus);
     }
 
     const search = params.toString();
