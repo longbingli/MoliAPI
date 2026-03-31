@@ -14,6 +14,10 @@ declare namespace API {
     userAvatar?: string;
     userProfile?: string;
     userRole?: string;
+    accessKey?: string;
+    secretKey?: string;
+    ak?: string;
+    sk?: string;
     createTime?: string;
     updateTime?: string;
   };
@@ -31,6 +35,10 @@ declare namespace API {
     unreadCount?: number;
     country?: string;
     access?: string;
+    accessKey?: string;
+    secretKey?: string;
+    ak?: string;
+    sk?: string;
     geographic?: {
       province?: { label?: string; key?: string };
       city?: { label?: string; key?: string };

@@ -1,7 +1,7 @@
-import { EditOutlined, UserOutlined } from '@ant-design/icons';
+﻿import { CopyOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
-import { App, Avatar, Button, Card, Col, Form, Input, Modal, Row, Space, Tag, Typography } from 'antd';
+import { App, Avatar, Button, Descriptions, Form, Input, Modal, Space, Tag, Typography } from 'antd';
 import React, { useMemo, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { updateMyUser } from '@/services/ant-design-pro/api';
@@ -22,6 +22,33 @@ const AccountCenterPage: React.FC = () => {
   );
   const avatar = currentUser?.userAvatar || currentUser?.avatar;
   const role = currentUser?.userRole || currentUser?.access || 'user';
+
+  const accessKey =
+    ((currentUser as API.CurrentUser & { accessKey?: string; ak?: string })?.accessKey ||
+      (currentUser as API.CurrentUser & { accessKey?: string; ak?: string })?.ak ||
+      '-') as string;
+  const secretKey =
+    ((currentUser as API.CurrentUser & { secretKey?: string; sk?: string })?.secretKey ||
+      (currentUser as API.CurrentUser & { secretKey?: string; sk?: string })?.sk ||
+      '-') as string;
+
+  const maskedSecretKey =
+    secretKey && secretKey !== '-' && secretKey.length > 10
+      ? `${secretKey.slice(0, 4)}****${secretKey.slice(-4)}`
+      : secretKey;
+
+  const copyText = async (text: string, label: string) => {
+    if (!text || text === '-') {
+      message.warning(`${label} 不可用`);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      message.success(`${label} 已复制`);
+    } catch (_error) {
+      message.error(`${label} 复制失败`);
+    }
+  };
 
   const openModal = () => {
     form.setFieldsValue({
@@ -63,35 +90,81 @@ const AccountCenterPage: React.FC = () => {
   };
 
   return (
-    <PageContainer title="个人中心" subTitle="管理你的基础资料">
-      <Row gutter={[16, 16]}>
-        <Col xs={24} lg={16}>
-          <Card
-            title="基础信息"
-            extra={
-              <Button type="primary" icon={<EditOutlined />} onClick={openModal}>
-                编辑资料
+    <PageContainer title="个人中心" subTitle="管理你的基础资料与令牌">
+      <div
+        style={{
+          width: '100%',
+          background: '#fff',
+          borderRadius: 12,
+          padding: 24,
+          marginBottom: 16,
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 20,
+            flexWrap: 'wrap',
+            gap: 12,
+          }}
+        >
+          <Typography.Title level={4} style={{ margin: 0 }}>
+            基础信息
+          </Typography.Title>
+          <Button type="primary" icon={<EditOutlined />} onClick={openModal}>
+            编辑资料
+          </Button>
+        </div>
+
+        <Space size={16} align="start" wrap>
+          <Avatar size={72} src={avatar} icon={<UserOutlined />} />
+          <Space direction="vertical" size={8}>
+            <Typography.Title level={4} style={{ margin: 0 }}>
+              {displayName}
+            </Typography.Title>
+            <Tag color="blue">{role}</Tag>
+            <Typography.Text type="secondary">
+              {currentUser?.userProfile || '这个人很神秘，暂时没有简介。'}
+            </Typography.Text>
+            <Typography.Text type="secondary">
+              注册时间：{currentUser?.createTime || '-'}
+            </Typography.Text>
+          </Space>
+        </Space>
+      </div>
+
+      <div
+        style={{
+          width: '100%',
+          background: '#fff',
+          borderRadius: 12,
+          padding: 24,
+        }}
+      >
+        <Typography.Title level={4} style={{ marginTop: 0 }}>
+          令牌管理
+        </Typography.Title>
+        <Descriptions column={1} size="small">
+          <Descriptions.Item label="Access Key (AK)">
+            <Space>
+              <Typography.Text code>{accessKey}</Typography.Text>
+              <Button type="link" size="small" icon={<CopyOutlined />} onClick={() => copyText(accessKey, 'AK')}>
+                复制
               </Button>
-            }
-          >
-            <Space size={16} align="start">
-              <Avatar size={72} src={avatar} icon={<UserOutlined />} />
-              <Space direction="vertical" size={8}>
-                <Typography.Title level={4} style={{ margin: 0 }}>
-                  {displayName}
-                </Typography.Title>
-                <Tag color="blue">{role}</Tag>
-                <Typography.Text type="secondary">
-                  {currentUser?.userProfile || '这个人很神秘，暂时没有简介。'}
-                </Typography.Text>
-                <Typography.Text type="secondary">
-                  注册时间：{currentUser?.createTime || '-'}
-                </Typography.Text>
-              </Space>
             </Space>
-          </Card>
-        </Col>
-      </Row>
+          </Descriptions.Item>
+          <Descriptions.Item label="Secret Key (SK)">
+            <Space>
+              <Typography.Text code>{maskedSecretKey}</Typography.Text>
+              <Button type="link" size="small" icon={<CopyOutlined />} onClick={() => copyText(secretKey, 'SK')}>
+                复制
+              </Button>
+            </Space>
+          </Descriptions.Item>
+        </Descriptions>
+      </div>
 
       <Modal
         title="编辑个人资料"
@@ -117,9 +190,7 @@ const AccountCenterPage: React.FC = () => {
           <Form.Item
             label="头像 URL"
             name="userAvatar"
-            rules={[
-              { type: 'url', message: '请输入合法 URL 地址' },
-            ]}
+            rules={[{ type: 'url', message: '请输入合法 URL 地址' }]}
           >
             <Input placeholder="https://example.com/avatar.png（可选）" />
           </Form.Item>

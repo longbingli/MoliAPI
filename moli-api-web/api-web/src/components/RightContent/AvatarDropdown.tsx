@@ -1,4 +1,4 @@
-import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
+ï»¿import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Spin } from 'antd';
@@ -87,12 +87,12 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ children }) =
     {
       key: 'accountCenter',
       icon: <UserOutlined />,
-      label: '¸öÈËÖÐÐÄ',
+      label: 'ä¸ªäººä¸­å¿ƒ',
     },
     {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: 'ÍË³öµÇÂ¼',
+      label: 'é€€å‡ºç™»å½•',
     },
   ];
 
