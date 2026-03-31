@@ -7,9 +7,6 @@
   },
   "tags": [
     {
-      "name": "DemoController"
-    },
-    {
       "name": "用户接口"
     },
     {
@@ -20,53 +17,6 @@
     }
   ],
   "paths": {
-    "/demo/poetry": {
-      "get": {
-        "summary": "random",
-        "deprecated": false,
-        "description": "",
-        "tags": [
-          "DemoController"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                },
-                "examples": {
-                  "1": {
-                    "summary": "成功示例",
-                    "value": {
-                      "code": 200,
-                      "message": "成功",
-                      "data": {
-                        "id": 5,
-                        "title": "江雪",
-                        "author": "柳宗元",
-                        "dynasty": "唐",
-                        "content": "千山鸟飞绝，万径人踪灭。孤舟蓑笠翁，独钓寒江雪。",
-                        "tags": "冬天,山水",
-                        "createTime": "2026-03-26T17:20:34"
-                      }
-                    }
-                  },
-                  "2": {
-                    "summary": "成功示例",
-                    "value": ""
-                  }
-                }
-              }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
     "/user/register": {
       "post": {
         "summary": "用户注册",
