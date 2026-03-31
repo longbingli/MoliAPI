@@ -17,6 +17,6 @@ public class DemoController {
 
     @GetMapping("/poetry")
     public String random() {
-        return moliClient.doRequest("GET", "/api/random/random", null);
+        return moliClient.doRequest("GET", "/api/poetry/random", null);
     }
 }

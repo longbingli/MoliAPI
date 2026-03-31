@@ -5,8 +5,8 @@ spring:
 
 moli:
   client:
-    accessKey: ak_moli_d34202bde65091a7fa2b8eb391789209
-    secretKey: sk_moli_Vs-kn1uKxU7LM0i9aI91MQ
+    accessKey: ak_moli_3b486211859274d4f8dca78a3b02ef1f
+    secretKey: sk_moli_2-CK6oUL_ZJz8CkFLDd83Q
     gatewayHost: http://localhost:8090
 server:
   port: 8092
