@@ -66,6 +66,25 @@ const prettyJson = (value: any) => {
   }
 };
 
+const formatResponseText = (text: string, contentType: string) => {
+  const raw = text || '(空响应)';
+  const maybeJson =
+    contentType.toLowerCase().includes('application/json') ||
+    raw.trim().startsWith('{') ||
+    raw.trim().startsWith('[');
+
+  if (!maybeJson) {
+    return { text: raw, format: 'text' as const };
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    return { text: JSON.stringify(parsed, null, 2), format: 'json' as const };
+  } catch (_error) {
+    return { text: raw, format: 'text' as const };
+  }
+};
+
 const normalizeApiPath = (value: string) => {
   if (!value) {
     return '/';
@@ -152,6 +171,7 @@ const InterfaceDetailPage: React.FC = () => {
   const [respStatus, setRespStatus] = useState<number | null>(null);
   const [respCost, setRespCost] = useState<number | null>(null);
   const [respText, setRespText] = useState('');
+  const [respFormat, setRespFormat] = useState<'json' | 'text'>('text');
 
   const fetchDetail = useCallback(async () => {
     if (!interfaceId) {
@@ -200,6 +220,7 @@ const InterfaceDetailPage: React.FC = () => {
     setDebugLoading(true);
     setDebugError('');
     setRespText('');
+    setRespFormat('text');
     setRespStatus(null);
     setRespCost(null);
 
@@ -237,10 +258,13 @@ const InterfaceDetailPage: React.FC = () => {
       const response = await fetch(url.toString(), requestInit);
       const end = performance.now();
       const text = await response.text();
+      const contentType = response.headers.get('content-type') || '';
+      const formatted = formatResponseText(text, contentType);
 
       setRespStatus(response.status);
       setRespCost(Math.round(end - start));
-      setRespText(text || '(空响应)');
+      setRespText(formatted.text);
+      setRespFormat(formatted.format);
     } catch (error) {
       const message = error instanceof Error ? error.message : '调试请求失败';
       setDebugError(message);
@@ -471,6 +495,9 @@ fetch("${baseUrl}${path}", {
                         状态码：{respStatus ?? '-'}
                       </Tag>
                       <Tag color="blue">耗时：{respCost !== null ? `${respCost}ms` : '-'}</Tag>
+                      <Tag color={respFormat === 'json' ? 'purple' : 'default'}>
+                        格式：{respFormat.toUpperCase()}
+                      </Tag>
                     </Space>
                     <Input.TextArea
                       value={respText}
