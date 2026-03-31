@@ -1,18 +1,18 @@
 package com.bingli.MoliAPI.model.dto.interfaceInfo;
+
 import lombok.Data;
 
 import java.io.Serializable;
 
-
 /**
- * 创建接口管理请求
- *
+ * 创建接口请求
  */
 @Data
 public class InterfaceInfoAddRequest implements Serializable {
-/**
- * 应用 id
- */
+
+    /**
+     * 应用 id
+     */
     private Long appId;
 
     /**
@@ -41,7 +41,27 @@ public class InterfaceInfoAddRequest implements Serializable {
     private String responseHeader;
 
     /**
-     * 接口状态（0-关闭，1-开启）
+     * 请求参数
+     */
+    private String requestParams;
+
+    /**
+     * 请求示例
+     */
+    private String requestExample;
+
+    /**
+     * 接口响应参数
+     */
+    private String responseParams;
+
+    /**
+     * 返回格式（JSON 等）
+     */
+    private String returnFormat;
+
+    /**
+     * 接口状态（1-关闭，0-开启）
      */
     private Integer status;
 
@@ -49,7 +69,6 @@ public class InterfaceInfoAddRequest implements Serializable {
      * 请求类型
      */
     private String method;
-
 
     private static final long serialVersionUID = 1L;
 }

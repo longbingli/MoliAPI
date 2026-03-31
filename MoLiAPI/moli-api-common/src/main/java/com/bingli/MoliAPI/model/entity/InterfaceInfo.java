@@ -1,21 +1,23 @@
 package com.bingli.MoliAPI.model.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * 接口信息
+ *
  * @TableName interface_info
  */
-@TableName(value ="interface_info")
+@TableName(value = "interface_info")
 @Data
 public class InterfaceInfo implements Serializable {
+
     /**
      * 主键
      */
@@ -23,7 +25,7 @@ public class InterfaceInfo implements Serializable {
     private Long id;
 
     /**
-     * 应用id
+     * 应用 id
      */
     private Long appId;
 
@@ -53,11 +55,32 @@ public class InterfaceInfo implements Serializable {
     private String responseHeader;
 
     /**
-     * 接口状态（0-关闭，1-开启）
+     * 请求参数
+     */
+    private String requestParams;
+
+    /**
+     * 请求示例
+     */
+    private String requestExample;
+
+    /**
+     * 接口响应参数
+     */
+    private String responseParams;
+
+    /**
+     * 返回格式（JSON 等）
+     */
+    private String returnFormat;
+
+    /**
+     * 接口状态（1-关闭，0-开启）
      */
     private Integer status;
-/**
-     * 请求参数
+
+    /**
+     * 调用次数
      */
     private Integer totalNum;
 

@@ -1,25 +1,22 @@
 package com.bingli.MoliAPI.model.vo;
 
-
 import com.bingli.MoliAPI.model.entity.InterfaceInfo;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
- * 接口管理视图
- *
+ * 接口信息视图
  */
 @Data
 public class InterfaceInfoVO implements Serializable {
 
     private Long id;
 
+    private Long appId;
 
-    private Integer appId;
     /**
      * 名称
      */
@@ -46,7 +43,27 @@ public class InterfaceInfoVO implements Serializable {
     private String responseHeader;
 
     /**
-     * 接口状态（0-关闭，1-开启）
+     * 请求参数
+     */
+    private String requestParams;
+
+    /**
+     * 请求示例
+     */
+    private String requestExample;
+
+    /**
+     * 接口响应参数
+     */
+    private String responseParams;
+
+    /**
+     * 返回格式（JSON 等）
+     */
+    private String returnFormat;
+
+    /**
+     * 接口状态（1-关闭，0-开启）
      */
     private Integer status;
 
@@ -70,18 +87,11 @@ public class InterfaceInfoVO implements Serializable {
      */
     private Date updateTime;
 
-
     /**
      * 创建用户信息
      */
     private UserVO user;
 
-    /**
-     * 封装类转对象
-     *
-     * @param interfaceInfoVO
-     * @return
-     */
     public static InterfaceInfo voToObj(InterfaceInfoVO interfaceInfoVO) {
         if (interfaceInfoVO == null) {
             return null;
@@ -91,12 +101,6 @@ public class InterfaceInfoVO implements Serializable {
         return interfaceInfo;
     }
 
-    /**
-     * 对象转封装类
-     *
-     * @param interfaceInfo
-     * @return
-     */
     public static InterfaceInfoVO objToVo(InterfaceInfo interfaceInfo) {
         if (interfaceInfo == null) {
             return null;

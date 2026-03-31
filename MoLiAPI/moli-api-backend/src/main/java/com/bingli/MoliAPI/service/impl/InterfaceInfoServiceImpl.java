@@ -11,7 +11,6 @@ import com.bingli.MoliAPI.exception.ThrowUtils;
 import com.bingli.MoliAPI.mapper.InterfaceInfoMapper;
 import com.bingli.MoliAPI.model.dto.interfaceInfo.InterfaceInfoQueryRequest;
 import com.bingli.MoliAPI.model.entity.InterfaceInfo;
-
 import com.bingli.MoliAPI.model.entity.User;
 import com.bingli.MoliAPI.model.vo.InterfaceInfoVO;
 import com.bingli.MoliAPI.model.vo.UserVO;
@@ -25,12 +24,15 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 接口管理服务实现
- *
+ * 接口服务实现
  */
 @Service
 @Slf4j
@@ -39,12 +41,6 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     @Resource
     private UserService userService;
 
-    /**
-     * 校验数据
-     *
-     * @param interfaceInfo
-     * @param add      对创建的数据进行校验
-     */
     @Override
     public void validInterfaceInfo(InterfaceInfo interfaceInfo, boolean add) {
         ThrowUtils.throwIf(interfaceInfo == null, ErrorCode.PARAMS_ERROR);
@@ -54,6 +50,10 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String url = interfaceInfo.getUrl();
         String requestHeader = interfaceInfo.getRequestHeader();
         String responseHeader = interfaceInfo.getResponseHeader();
+        String requestParams = interfaceInfo.getRequestParams();
+        String requestExample = interfaceInfo.getRequestExample();
+        String responseParams = interfaceInfo.getResponseParams();
+        String returnFormat = interfaceInfo.getReturnFormat();
         String method = interfaceInfo.getMethod();
         Long appId = interfaceInfo.getAppId();
 
@@ -64,14 +64,19 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
             ThrowUtils.throwIf(appId == null, ErrorCode.PARAMS_ERROR, "应用信息不能为空");
             ThrowUtils.throwIf(appId <= 0, ErrorCode.PARAMS_ERROR, "应用信息不能为空");
         }
+
+        if (ObjectUtils.isNotEmpty(appId)) {
+            ThrowUtils.throwIf(appId <= 0, ErrorCode.PARAMS_ERROR, "应用信息不能为空");
+        }
+
         if (StringUtils.isNotBlank(name)) {
             name = name.trim();
-            ThrowUtils.throwIf(name.length() > 50, ErrorCode.PARAMS_ERROR, "接口名称过长");
+            ThrowUtils.throwIf(name.length() > 256, ErrorCode.PARAMS_ERROR, "接口名称过长");
         }
 
         if (StringUtils.isNotBlank(description)) {
             description = description.trim();
-            ThrowUtils.throwIf(description.length() > 500, ErrorCode.PARAMS_ERROR, "接口描述过长");
+            ThrowUtils.throwIf(description.length() > 256, ErrorCode.PARAMS_ERROR, "接口描述过长");
         }
 
         if (StringUtils.isNotBlank(url)) {
@@ -89,14 +94,30 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
         if (StringUtils.isNotBlank(requestHeader)) {
             requestHeader = requestHeader.trim();
-            ThrowUtils.throwIf(requestHeader.length() > 2048, ErrorCode.PARAMS_ERROR, "请求头过长");
+            ThrowUtils.throwIf(requestHeader.length() > 65535, ErrorCode.PARAMS_ERROR, "请求头过长");
             ThrowUtils.throwIf(!isValidJson(requestHeader), ErrorCode.PARAMS_ERROR, "请求头必须为合法 JSON");
         }
 
         if (StringUtils.isNotBlank(responseHeader)) {
             responseHeader = responseHeader.trim();
-            ThrowUtils.throwIf(responseHeader.length() > 2048, ErrorCode.PARAMS_ERROR, "响应头过长");
+            ThrowUtils.throwIf(responseHeader.length() > 65535, ErrorCode.PARAMS_ERROR, "响应头过长");
             ThrowUtils.throwIf(!isValidJson(responseHeader), ErrorCode.PARAMS_ERROR, "响应头必须为合法 JSON");
+        }
+
+        if (StringUtils.isNotBlank(requestParams)) {
+            ThrowUtils.throwIf(requestParams.trim().length() > 255, ErrorCode.PARAMS_ERROR, "请求参数过长");
+        }
+
+        if (StringUtils.isNotBlank(requestExample)) {
+            ThrowUtils.throwIf(requestExample.trim().length() > 255, ErrorCode.PARAMS_ERROR, "请求示例过长");
+        }
+
+        if (StringUtils.isNotBlank(responseParams)) {
+            ThrowUtils.throwIf(responseParams.trim().length() > 255, ErrorCode.PARAMS_ERROR, "响应参数过长");
+        }
+
+        if (StringUtils.isNotBlank(returnFormat)) {
+            ThrowUtils.throwIf(returnFormat.trim().length() > 255, ErrorCode.PARAMS_ERROR, "返回格式过长");
         }
     }
 
@@ -109,24 +130,22 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         }
     }
 
-    /**
-     * 获取查询条件
-     *
-     * @param interfaceInfoQueryRequest
-     * @return
-     */
     @Override
     public QueryWrapper<InterfaceInfo> getQueryWrapper(InterfaceInfoQueryRequest interfaceInfoQueryRequest) {
         QueryWrapper<InterfaceInfo> queryWrapper = new QueryWrapper<>();
         if (interfaceInfoQueryRequest == null) {
             return queryWrapper;
         }
-        // todo 从对象中取值
         Long id = interfaceInfoQueryRequest.getId();
+        Long appId = interfaceInfoQueryRequest.getAppId();
         String name = interfaceInfoQueryRequest.getName();
         String description = interfaceInfoQueryRequest.getDescription();
         String requestHeader = interfaceInfoQueryRequest.getRequestHeader();
         String responseHeader = interfaceInfoQueryRequest.getResponseHeader();
+        String requestParams = interfaceInfoQueryRequest.getRequestParams();
+        String requestExample = interfaceInfoQueryRequest.getRequestExample();
+        String responseParams = interfaceInfoQueryRequest.getResponseParams();
+        String returnFormat = interfaceInfoQueryRequest.getReturnFormat();
         Integer status = interfaceInfoQueryRequest.getStatus();
         String method = interfaceInfoQueryRequest.getMethod();
         Long userId = interfaceInfoQueryRequest.getUserId();
@@ -137,45 +156,38 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String sortField = interfaceInfoQueryRequest.getSortField();
         String sortOrder = interfaceInfoQueryRequest.getSortOrder();
 
-
-        // 从多字段中搜索
         if (StringUtils.isNotBlank(searchText)) {
-            // 需要拼接查询条件
             queryWrapper.and(qw -> qw.like("name", searchText).or().like("description", searchText));
         }
-        // 模糊查询
+
         queryWrapper.like(StringUtils.isNotBlank(description), "description", description);
         queryWrapper.like(StringUtils.isNotBlank(name), "name", name);
-        // 精确查询
+
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(appId), "appId", appId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(requestHeader), "requestHeader", requestHeader);
         queryWrapper.eq(ObjectUtils.isNotEmpty(responseHeader), "responseHeader", responseHeader);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(requestParams), "requestParams", requestParams);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(requestExample), "requestExample", requestExample);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(responseParams), "responseParams", responseParams);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(returnFormat), "returnFormat", returnFormat);
         queryWrapper.eq(ObjectUtils.isNotEmpty(method), "method", method);
         queryWrapper.eq(ObjectUtils.isNotEmpty(status), "status", status);
-        // 排序规则
+        queryWrapper.eq(ObjectUtils.isNotEmpty(createTime), "createTime", createTime);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(updateTime), "updateTime", updateTime);
+
         queryWrapper.orderBy(SqlUtils.validSortField(sortField),
-                sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
+                CommonConstant.SORT_ORDER_ASC.equals(sortOrder),
                 sortField);
         return queryWrapper;
     }
 
-    /**
-     * 获取接口管理封装
-     *
-     * @param interfaceInfo
-     * @param request
-     * @return
-     */
     @Override
     public InterfaceInfoVO getInterfaceInfoVO(InterfaceInfo interfaceInfo, HttpServletRequest request) {
-        // 对象转封装类
         InterfaceInfoVO interfaceInfoVO = InterfaceInfoVO.objToVo(interfaceInfo);
 
-
-        // region 可选
-        // 1. 关联查询用户信息
         Long userId = interfaceInfo.getUserId();
         User user = null;
         if (userId != null && userId > 0) {
@@ -186,32 +198,25 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         return interfaceInfoVO;
     }
 
-    /**
-     * 分页获取接口管理封装
-     *
-     * @param interfaceInfoPage
-     * @param request
-     * @return
-     */
     @Override
     public Page<InterfaceInfoVO> getInterfaceInfoVOPage(Page<InterfaceInfo> interfaceInfoPage, HttpServletRequest request) {
         List<InterfaceInfo> interfaceInfoList = interfaceInfoPage.getRecords();
-        Page<InterfaceInfoVO> interfaceInfoVOPage = new Page<>(interfaceInfoPage.getCurrent(), interfaceInfoPage.getSize(), interfaceInfoPage.getTotal());
+        Page<InterfaceInfoVO> interfaceInfoVOPage =
+                new Page<>(interfaceInfoPage.getCurrent(), interfaceInfoPage.getSize(), interfaceInfoPage.getTotal());
         if (CollUtil.isEmpty(interfaceInfoList)) {
             return interfaceInfoVOPage;
         }
-        // 对象列表 => 封装对象列表
-        List<InterfaceInfoVO> interfaceInfoVOList = interfaceInfoList.stream().map(interfaceInfo -> {
-            return InterfaceInfoVO.objToVo(interfaceInfo);
-        }).collect(Collectors.toList());
 
-        // region 可选
-        // 1. 关联查询用户信息
-        Set<Long> userIdSet = interfaceInfoList.stream().map(InterfaceInfo::getUserId).collect(Collectors.toSet());
+        List<InterfaceInfoVO> interfaceInfoVOList = interfaceInfoList.stream()
+                .map(InterfaceInfoVO::objToVo)
+                .collect(Collectors.toList());
+
+        Set<Long> userIdSet = interfaceInfoList.stream()
+                .map(InterfaceInfo::getUserId)
+                .collect(Collectors.toSet());
         Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
 
-        // 填充信息
         interfaceInfoVOList.forEach(interfaceInfoVO -> {
             Long userId = interfaceInfoVO.getUserId();
             User user = null;
@@ -220,10 +225,8 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
             }
             interfaceInfoVO.setUser(userService.getUserVO(user));
         });
-        // endregion
 
         interfaceInfoVOPage.setRecords(interfaceInfoVOList);
         return interfaceInfoVOPage;
     }
-
 }

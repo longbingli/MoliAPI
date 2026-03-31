@@ -8,8 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 查询接口管理请求
- *
+ * 查询接口请求
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -20,6 +19,9 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
      */
     private Long id;
 
+    /**
+     * 应用 id
+     */
     private Long appId;
 
     /**
@@ -32,7 +34,6 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
      */
     private String description;
 
-
     /**
      * 请求头
      */
@@ -44,7 +45,27 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
     private String responseHeader;
 
     /**
-     * 接口状态（0-关闭，1-开启）
+     * 请求参数
+     */
+    private String requestParams;
+
+    /**
+     * 请求示例
+     */
+    private String requestExample;
+
+    /**
+     * 接口响应参数
+     */
+    private String responseParams;
+
+    /**
+     * 返回格式（JSON 等）
+     */
+    private String returnFormat;
+
+    /**
+     * 接口状态（1-关闭，0-开启）
      */
     private Integer status;
 
@@ -68,20 +89,15 @@ public class InterfaceInfoQueryRequest extends PageRequest implements Serializab
      */
     private Date updateTime;
 
-
-
     /**
-     * id
+     * 排除 id
      */
     private Long notId;
 
     /**
-     * 搜索词
+     * 关键词搜索
      */
     private String searchText;
-
-
-
 
     private static final long serialVersionUID = 1L;
 }
