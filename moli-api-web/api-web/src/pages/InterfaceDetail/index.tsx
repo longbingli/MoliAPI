@@ -66,24 +66,65 @@ const prettyJson = (value: any) => {
   }
 };
 
+const normalizeApiPath = (value: string) => {
+  if (!value) {
+    return '/';
+  }
+  const withSlash = value.startsWith('/') ? value : `/${value}`;
+  return withSlash.replace(/\/{2,}/g, '/');
+};
+
+const normalizeApiParts = (base: string, path: string) => {
+  const baseTrim = base.trim();
+  const pathTrim = path.trim();
+  const pathNorm = normalizeApiPath(pathTrim || '/');
+
+  const isAbsolute = /^https?:\/\//i.test(baseTrim);
+  if (isAbsolute) {
+    const baseHasApi = /\/api\/?$/i.test(baseTrim);
+    const pathHasApi = /^\/api(\/|$)/i.test(pathNorm);
+    const nextPath = baseHasApi && pathHasApi ? pathNorm.replace(/^\/api/i, '') || '/' : pathNorm;
+    return { baseUrl: baseTrim, path: normalizeApiPath(nextPath) };
+  }
+
+  const baseNormRaw = baseTrim || '/api';
+  const baseNorm = baseNormRaw.startsWith('/') ? baseNormRaw : `/${baseNormRaw}`;
+  const baseHasApi = /\/api\/?$/i.test(baseNorm);
+  const pathHasApi = /^\/api(\/|$)/i.test(pathNorm);
+  const nextPath = baseHasApi && pathHasApi ? pathNorm.replace(/^\/api/i, '') || '/' : pathNorm;
+  return { baseUrl: baseNorm.replace(/\/{2,}/g, '/'), path: normalizeApiPath(nextPath) };
+};
+
+const buildRequestUrl = (base: string, path: string) => {
+  const normalized = normalizeApiParts(base, path);
+  if (/^https?:\/\//i.test(normalized.baseUrl)) {
+    return `${normalized.baseUrl}${normalized.path}`;
+  }
+  return new URL(`${normalized.baseUrl}${normalized.path}`, window.location.origin).toString();
+};
+
 const splitUrl = (url?: string) => {
   if (!url) {
     return {
-      baseUrl: 'http://localhost:8101/api',
+      baseUrl: '/api',
       path: '/',
     };
   }
   try {
     const target = new URL(url);
+    const pathname = target.pathname || '/';
+    if (/^\/api(\/|$)/i.test(pathname)) {
+      return {
+        baseUrl: '/api',
+        path: pathname.replace(/^\/api/i, '') || '/',
+      };
+    }
     return {
       baseUrl: `${target.protocol}//${target.host}`,
-      path: `${target.pathname}${target.search}` || '/',
+      path: `${pathname}${target.search}` || '/',
     };
   } catch (_error) {
-    return {
-      baseUrl: 'http://localhost:8101/api',
-      path: url,
-    };
+    return normalizeApiParts('/api', url);
   }
 };
 
@@ -98,7 +139,7 @@ const InterfaceDetailPage: React.FC = () => {
   const [info, setInfo] = useState<API.InterfaceInfoVO | null>(null);
 
   const [method, setMethod] = useState('POST');
-  const [baseUrl, setBaseUrl] = useState('http://localhost:8101/api');
+  const [baseUrl, setBaseUrl] = useState('/api');
   const [path, setPath] = useState('/');
 
   const [queryJson, setQueryJson] = useState('{}');
@@ -163,7 +204,8 @@ const InterfaceDetailPage: React.FC = () => {
     setRespCost(null);
 
     try {
-      const url = new URL(`${baseUrl}${path}`);
+      const requestUrl = buildRequestUrl(baseUrl, path);
+      const url = new URL(requestUrl);
       const queryParams = parseJsonObject(queryJson, '查询参数');
       const headers = parseJsonObject(headerJson, '请求头');
 
@@ -176,6 +218,7 @@ const InterfaceDetailPage: React.FC = () => {
       const requestInit: RequestInit = {
         method,
         headers,
+        credentials: 'include',
       };
 
       if (!['GET', 'HEAD'].includes(method) && bodyMode !== 'none') {
@@ -236,6 +279,7 @@ const InterfaceDetailPage: React.FC = () => {
 fetch("${baseUrl}${path}", {
   method: "${method}",
   headers,
+  credentials: "include",
   body: ${bodyMode === 'json' ? bodyText || '{}' : '""'},
 })
   .then(res => res.text())
