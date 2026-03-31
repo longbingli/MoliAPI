@@ -65,3 +65,18 @@ export async function register(
     ...(options || {}),
   });
 }
+
+/** 更新当前用户信息 POST /user/update/my */
+export async function updateMyUser(
+  body: API.UserUpdateMyRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponse<boolean>>('/user/update/my', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

@@ -11,6 +11,7 @@ import {
   Question,
   SelectLang,
 } from '@/components';
+import SiderUserCard from '@/components/SiderUserCard';
 import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
@@ -116,6 +117,9 @@ export const layout: RunTimeLayoutConfig = ({
         ]
       : [],
     menuHeaderRender: undefined,
+    menuFooterRender: (props) => (
+      <SiderUserCard collapsed={!!props?.collapsed} />
+    ),
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态

@@ -1,4 +1,4 @@
-ï»¿import { LogoutOutlined } from '@ant-design/icons';
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import type { MenuProps } from 'antd';
 import { Spin } from 'antd';
@@ -53,6 +53,10 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ children }) =
   };
 
   const onMenuClick: MenuProps['onClick'] = async (event) => {
+    if (event.key === 'accountCenter') {
+      history.push('/account/center');
+      return;
+    }
     if (event.key === 'logout') {
       await loginOut();
     }
@@ -81,9 +85,14 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ children }) =
 
   const menuItems = [
     {
+      key: 'accountCenter',
+      icon: <UserOutlined />,
+      label: '¸öÈËÖÐÐÄ',
+    },
+    {
       key: 'logout',
       icon: <LogoutOutlined />,
-      label: 'é€€å‡ºç™»å½•',
+      label: 'ÍË³öµÇÂ¼',
     },
   ];
 

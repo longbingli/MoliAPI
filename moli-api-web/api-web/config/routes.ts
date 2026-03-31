@@ -17,6 +17,12 @@
     component: './Home',
   },
   {
+    path: '/account/center',
+    name: '个人中心',
+    icon: 'user',
+    component: './AccountCenter',
+  },
+  {
     path: '/apps/:appId/interfaces',
     component: './InterfaceList',
   },

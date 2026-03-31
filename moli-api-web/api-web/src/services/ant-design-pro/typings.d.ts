@@ -50,6 +50,12 @@ declare namespace API {
     checkPassword?: string;
   };
 
+  type UserUpdateMyRequest = {
+    userName?: string;
+    userAvatar?: string;
+    userProfile?: string;
+  };
+
   type AppInfoVO = {
     appId?: number | string;
     appName?: string;
