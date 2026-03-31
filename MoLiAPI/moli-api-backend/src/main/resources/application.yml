@@ -118,3 +118,9 @@ dubbo:
   protocol:
     name: dubbo
     port: -1   # 随机端口
+
+
+
+moli:
+  client:
+    gateway-host: http://localhost:8090
