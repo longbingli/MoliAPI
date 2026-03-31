@@ -94,6 +94,23 @@ declare namespace API {
     searchText?: string;
   };
 
+  type AppInfoAddRequest = {
+    appName?: string;
+    description?: string;
+    host?: string;
+    deductPoints?: number;
+    status?: number;
+  };
+
+  type AppInfoEditRequest = {
+    appId?: number | string;
+    appName?: string;
+    description?: string;
+    host?: string;
+    deductPoints?: number;
+    status?: number;
+  };
+
   type PageAppInfoVO = {
     records?: AppInfoVO[];
     total?: number | string;
@@ -109,6 +126,11 @@ declare namespace API {
     url?: string;
     requestHeader?: string;
     responseHeader?: string;
+    requestParams?: string;
+    requestExample?: string;
+    responseParams?: string;
+    returnFormat?: string;
+    totalNum?: number;
     status?: number | string;
     method?: string;
     userId?: number | string;
@@ -127,6 +149,10 @@ declare namespace API {
     description?: string;
     requestHeader?: string;
     responseHeader?: string;
+    requestParams?: string;
+    requestExample?: string;
+    responseParams?: string;
+    returnFormat?: string;
     status?: number | string;
     method?: string;
     userId?: number | string;
@@ -134,6 +160,41 @@ declare namespace API {
     updateTime?: string;
     notId?: number | string;
     searchText?: string;
+  };
+
+  type InterfaceInfoAddRequest = {
+    appId?: number | string;
+    name?: string;
+    description?: string;
+    url?: string;
+    requestHeader?: string;
+    responseHeader?: string;
+    requestParams?: string;
+    requestExample?: string;
+    responseParams?: string;
+    returnFormat?: string;
+    status?: number;
+    method?: string;
+  };
+
+  type InterfaceInfoEditRequest = {
+    id?: number | string;
+    appId?: number | string;
+    name?: string;
+    description?: string;
+    url?: string;
+    requestHeader?: string;
+    responseHeader?: string;
+    requestParams?: string;
+    requestExample?: string;
+    responseParams?: string;
+    returnFormat?: string;
+    status?: number;
+    method?: string;
+  };
+
+  type DeleteRequest = {
+    id?: number | string;
   };
 
   type PageInterfaceInfoVO = {

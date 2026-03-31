@@ -29,3 +29,48 @@ export async function getInterfaceInfoById(
     ...(options || {}),
   });
 }
+
+/** 创建接口 POST /interfaceInfo/add */
+export async function addInterfaceInfo(
+  body: API.InterfaceInfoAddRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponse<number>>('/interfaceInfo/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 编辑接口 POST /interfaceInfo/edit */
+export async function editInterfaceInfo(
+  body: API.InterfaceInfoEditRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponse<boolean>>('/interfaceInfo/edit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 删除接口 POST /interfaceInfo/delete */
+export async function deleteInterfaceInfo(
+  body: API.DeleteRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponse<boolean>>('/interfaceInfo/delete', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

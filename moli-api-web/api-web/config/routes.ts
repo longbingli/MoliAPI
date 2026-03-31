@@ -29,6 +29,17 @@
     component: './TokenManage',
   },
   {
+    path: '/manage/apis',
+    name: '接口管理',
+    icon: 'appstore',
+    component: './ApiManage',
+  },
+  {
+    path: '/manage/apis/:appId',
+    hideInMenu: true,
+    component: './ApiManage/InterfaceManage',
+  },
+  {
     path: '/apps/:appId/interfaces',
     component: './InterfaceList',
   },
