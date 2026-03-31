@@ -1,6 +1,9 @@
 ﻿import {
   ArrowLeftOutlined,
-  DownOutlined,
+  BugOutlined,
+  CodeOutlined,
+  ExclamationCircleOutlined,
+  FileTextOutlined,
   PlayCircleOutlined,
   ReloadOutlined,
 } from '@ant-design/icons';
@@ -13,65 +16,30 @@ import {
   Col,
   Input,
   Row,
+  Select,
   Space,
   Spin,
+  Table,
+  Tabs,
   Tag,
   Typography,
 } from 'antd';
-import { createStyles } from 'antd-style';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getInterfaceInfoById } from '@/services/interfaceInfo';
 
 const SUCCESS_CODE = 0;
 
-type DebugTab =
-  | 'params'
-  | 'body'
-  | 'headers'
-  | 'cookies'
-  | 'auth'
-  | 'pre'
-  | 'post'
-  | 'settings';
+type BodyMode = 'json' | 'text' | 'xml' | 'none';
 
-type BodyMode =
-  | 'none'
-  | 'form-data'
-  | 'x-www-form-urlencoded'
-  | 'json'
-  | 'xml'
-  | 'text'
-  | 'binary'
-  | 'graphql'
-  | 'msgpack';
-
-const debugTabs: Array<{ key: DebugTab; label: string; badge?: number }> = [
-  { key: 'params', label: 'Params' },
-  { key: 'body', label: 'Body', badge: 1 },
-  { key: 'headers', label: 'Headers' },
-  { key: 'cookies', label: 'Cookies' },
-  { key: 'auth', label: 'Auth' },
-  { key: 'pre', label: '前置操作' },
-  { key: 'post', label: '后置操作', badge: 1 },
-  { key: 'settings', label: '设置' },
+const ERROR_CODE_ROWS = [
+  { code: 0, name: 'SUCCESS', desc: '请求成功' },
+  { code: 40000, name: 'PARAMS_ERROR', desc: '请求参数错误' },
+  { code: 40100, name: 'NO_AUTH_ERROR', desc: '未登录或鉴权失败' },
+  { code: 40300, name: 'NO_PERMISSION_ERROR', desc: '无访问权限' },
+  { code: 50000, name: 'SYSTEM_ERROR', desc: '系统内部错误' },
 ];
 
-const bodyModes: Array<{ key: BodyMode; label: string }> = [
-  { key: 'none', label: 'none' },
-  { key: 'form-data', label: 'form-data' },
-  { key: 'x-www-form-urlencoded', label: 'x-www-form-urlencoded' },
-  { key: 'json', label: 'JSON' },
-  { key: 'xml', label: 'XML' },
-  { key: 'text', label: 'Text' },
-  { key: 'binary', label: 'Binary' },
-  { key: 'graphql', label: 'GraphQL' },
-  { key: 'msgpack', label: 'msgpack' },
-];
-
-const parseJsonObject = (
-  value: string,
-  fieldName: string,
-): Record<string, any> => {
+const parseJsonObject = (value: string, fieldName: string): Record<string, any> => {
   if (!value.trim()) {
     return {};
   }
@@ -87,6 +55,17 @@ const parseJsonObject = (
   return parsed;
 };
 
+const prettyJson = (value: any) => {
+  if (typeof value === 'string') {
+    return value;
+  }
+  try {
+    return JSON.stringify(value, null, 2);
+  } catch (_error) {
+    return String(value);
+  }
+};
+
 const splitUrl = (url?: string) => {
   if (!url) {
     return {
@@ -94,7 +73,6 @@ const splitUrl = (url?: string) => {
       path: '/',
     };
   }
-
   try {
     const target = new URL(url);
     return {
@@ -109,264 +87,32 @@ const splitUrl = (url?: string) => {
   }
 };
 
-const prettyJson = (value: any): string => {
-  if (typeof value === 'string') {
-    return value;
-  }
-  try {
-    return JSON.stringify(value, null, 2);
-  } catch (_error) {
-    return String(value);
-  }
-};
-
-const useStyles = createStyles(() => ({
-  requestCard: {
-    borderRadius: 14,
-    border: '1px solid #e5e7eb',
-    overflow: 'hidden',
-    background: '#ffffff',
-  },
-  requestTop: {
-    display: 'grid',
-    gridTemplateColumns: '100px 1fr 220px',
-    gap: 10,
-    alignItems: 'center',
-    padding: 12,
-    borderBottom: '1px solid #eef1f5',
-    '@media (max-width: 900px)': {
-      gridTemplateColumns: '1fr',
-    },
-  },
-  methodBtn: {
-    height: 44,
-    borderRadius: 10,
-    border: '1px solid #ffd1b8',
-    background: '#fff3ec',
-    color: '#fa541c',
-    fontWeight: 700,
-    fontSize: 30,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    fontFamily: "'Chakra Petch', 'PingFang SC', sans-serif",
-  },
-  urlBar: {
-    height: 44,
-    borderRadius: 10,
-    border: '1px solid #e5e7eb',
-    background: '#f7f9fc',
-    display: 'grid',
-    gridTemplateColumns: '200px 1fr',
-    overflow: 'hidden',
-    '@media (max-width: 900px)': {
-      gridTemplateColumns: '1fr',
-      height: 'auto',
-    },
-  },
-  baseInput: {
-    border: 0,
-    borderRight: '1px solid #e5e7eb',
-    borderRadius: 0,
-    fontSize: 24,
-    color: '#4b5563',
-    '@media (max-width: 900px)': {
-      borderRight: 'none',
-      borderBottom: '1px solid #e5e7eb',
-    },
-  },
-  pathInput: {
-    border: 0,
-    borderRadius: 0,
-    fontSize: 28,
-    color: '#111827',
-  },
-  sendBtn: {
-    height: 44,
-    borderRadius: 12,
-    fontWeight: 700,
-    fontSize: 23,
-    background: 'linear-gradient(90deg, #f472b6 0%, #ec4899 100%)',
-    border: 'none',
-    boxShadow: '0 8px 20px rgba(236, 72, 153, 0.26)',
-    '&:hover': {
-      filter: 'brightness(1.04)',
-    },
-    '&:active': {
-      transform: 'translateY(1px)',
-    },
-    '&:disabled': {
-      filter: 'grayscale(0.2)',
-      opacity: 0.75,
-    },
-  },
-  tabs: {
-    display: 'flex',
-    gap: 26,
-    padding: '14px 12px 0',
-    borderBottom: '1px solid #eef1f5',
-    overflowX: 'auto',
-    whiteSpace: 'nowrap',
-  },
-  tabItem: {
-    border: 'none',
-    background: 'transparent',
-    color: '#475569',
-    padding: '0 0 12px',
-    fontSize: 30,
-    cursor: 'pointer',
-    position: 'relative',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 6,
-    '&[data-active="true"]': {
-      color: '#ec4899',
-      fontWeight: 600,
-    },
-    '&[data-active="true"]::after': {
-      content: '""',
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      height: 2,
-      background: '#ec4899',
-      borderRadius: 2,
-    },
-  },
-  tabBadge: {
-    color: '#06b6d4',
-    fontSize: 23,
-    fontWeight: 600,
-  },
-  bodyModes: {
-    display: 'flex',
-    gap: 18,
-    padding: '12px',
-    borderBottom: '1px solid #eef1f5',
-    overflowX: 'auto',
-    whiteSpace: 'nowrap',
-  },
-  modeItem: {
-    border: 'none',
-    background: 'transparent',
-    padding: '4px 0',
-    color: '#334155',
-    cursor: 'pointer',
-    fontSize: 23,
-    borderRadius: 999,
-    '&[data-active="true"]': {
-      background: '#2f80ed',
-      color: '#fff',
-      padding: '4px 12px',
-    },
-  },
-  editorWrap: {
-    position: 'relative',
-    padding: 12,
-    background: '#fbfcfe',
-  },
-  editorToolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-    gap: 10,
-    flexWrap: 'wrap',
-  },
-  tinyBtn: {
-    borderRadius: 8,
-  },
-  editorBox: {
-    border: '1px solid #e5e7eb',
-    borderRadius: 10,
-    background: '#fff',
-    overflow: 'hidden',
-    display: 'grid',
-    gridTemplateColumns: '50px 1fr',
-  },
-  lineNo: {
-    background: '#f8fafc',
-    borderRight: '1px solid #e5e7eb',
-    color: '#2563eb',
-    fontFamily: 'Consolas, Menlo, monospace',
-    fontSize: 23,
-    lineHeight: '30px',
-    padding: '10px 8px',
-    userSelect: 'none',
-  },
-  editorArea: {
-    border: 0,
-    fontFamily: 'Consolas, Menlo, monospace',
-    fontSize: 25,
-    lineHeight: '30px',
-    minHeight: 240,
-    borderRadius: 0,
-    resize: 'vertical',
-  },
-  responseArea: {
-    fontFamily: 'Consolas, Menlo, monospace',
-    fontSize: 22,
-  },
-}));
-
 const InterfaceDetailPage: React.FC = () => {
-  const { styles } = useStyles();
-  const { appId, interfaceId } = useParams<{
-    appId: string;
-    interfaceId: string;
-  }>();
+  const { appId, interfaceId } = useParams<{ appId: string; interfaceId: string }>();
   const location = useLocation();
-  const query = useMemo(
-    () => new URLSearchParams(location.search),
-    [location.search],
-  );
-
+  const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const appName = query.get('appName') || `应用 #${appId}`;
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [interfaceInfo, setInterfaceInfo] =
-    useState<API.InterfaceInfoVO | null>(null);
+  const [info, setInfo] = useState<API.InterfaceInfoVO | null>(null);
 
   const [method, setMethod] = useState('POST');
   const [baseUrl, setBaseUrl] = useState('http://localhost:8101/api');
-  const [path, setPath] = useState('/appInfo/list/page/vo');
+  const [path, setPath] = useState('/');
 
-  const [activeTab, setActiveTab] = useState<DebugTab>('body');
+  const [queryJson, setQueryJson] = useState('{}');
+  const [headerJson, setHeaderJson] = useState('{}');
   const [bodyMode, setBodyMode] = useState<BodyMode>('json');
-
-  const [queryText, setQueryText] = useState('{}');
-  const [headerText, setHeaderText] = useState('{}');
   const [bodyText, setBodyText] = useState('{}');
 
   const [debugLoading, setDebugLoading] = useState(false);
   const [debugError, setDebugError] = useState('');
-  const [responseStatus, setResponseStatus] = useState<number | null>(null);
-  const [responseDuration, setResponseDuration] = useState<number | null>(null);
-  const [responseText, setResponseText] = useState('');
+  const [respStatus, setRespStatus] = useState<number | null>(null);
+  const [respCost, setRespCost] = useState<number | null>(null);
+  const [respText, setRespText] = useState('');
 
-  const currentEditorText =
-    activeTab === 'params'
-      ? queryText
-      : activeTab === 'headers'
-        ? headerText
-        : bodyText;
-
-  const setCurrentEditorText = (value: string) => {
-    if (activeTab === 'params') {
-      setQueryText(value);
-      return;
-    }
-    if (activeTab === 'headers') {
-      setHeaderText(value);
-      return;
-    }
-    setBodyText(value);
-  };
-
-  const fetchInterfaceInfo = useCallback(async () => {
+  const fetchDetail = useCallback(async () => {
     if (!interfaceId) {
       return;
     }
@@ -377,41 +123,34 @@ const InterfaceDetailPage: React.FC = () => {
       if (response.code !== SUCCESS_CODE || !response.data) {
         throw new Error(response.message || '获取接口详情失败');
       }
-
       const detail = response.data as API.InterfaceInfoVO;
-      setInterfaceInfo(detail);
-      setMethod((detail.method || 'POST').toUpperCase());
+      setInfo(detail);
 
-      const split = splitUrl(detail.url);
-      setBaseUrl(split.baseUrl);
-      setPath(split.path);
+      const targetMethod = (detail.method || 'POST').toUpperCase();
+      setMethod(targetMethod);
+      const targetUrl = splitUrl(detail.url);
+      setBaseUrl(targetUrl.baseUrl);
+      setPath(targetUrl.path);
 
-      const defaultHeaders = detail.requestHeader
-        ? prettyJson(detail.requestHeader)
-        : '{}';
-      setHeaderText(defaultHeaders);
-
-      if (!detail.method || ['POST', 'PUT', 'PATCH', 'DELETE'].includes(detail.method.toUpperCase())) {
-        setActiveTab('body');
+      setHeaderJson(detail.requestHeader ? prettyJson(detail.requestHeader) : '{}');
+      setBodyText('{}');
+      if (['GET', 'HEAD'].includes(targetMethod)) {
+        setBodyMode('none');
       }
     } catch (error) {
-      const message =
-        error instanceof Error && error.message
-          ? error.message
-          : '获取接口详情失败';
+      const message = error instanceof Error ? error.message : '获取接口详情失败';
       setErrorMessage(message);
-      setInterfaceInfo(null);
+      setInfo(null);
     } finally {
       setLoading(false);
     }
   }, [interfaceId]);
 
   useEffect(() => {
-    fetchInterfaceInfo();
-  }, [fetchInterfaceInfo]);
+    fetchDetail();
+  }, [fetchDetail]);
 
-  const onDebug = async () => {
-    const full = `${baseUrl}${path}`;
+  const runDebug = async () => {
     if (!baseUrl.trim() || !path.trim()) {
       setDebugError('请先填写完整请求地址');
       return;
@@ -419,33 +158,32 @@ const InterfaceDetailPage: React.FC = () => {
 
     setDebugLoading(true);
     setDebugError('');
-    setResponseText('');
-    setResponseStatus(null);
-    setResponseDuration(null);
+    setRespText('');
+    setRespStatus(null);
+    setRespCost(null);
 
     try {
-      const queryParams = parseJsonObject(queryText, '查询参数');
-      const headers = parseJsonObject(headerText, '请求头');
-      const body = parseJsonObject(bodyText, '请求体');
+      const url = new URL(`${baseUrl}${path}`);
+      const queryParams = parseJsonObject(queryJson, '查询参数');
+      const headers = parseJsonObject(headerJson, '请求头');
 
-      const targetUrl = new URL(full);
       Object.entries(queryParams).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && `${value}`.length > 0) {
-          targetUrl.searchParams.set(key, String(value));
+        if (value !== null && value !== undefined && `${value}`.length > 0) {
+          url.searchParams.set(key, String(value));
         }
       });
 
       const requestInit: RequestInit = {
-        method: method.toUpperCase(),
+        method,
         headers,
       };
 
-      if (!['GET', 'HEAD'].includes(method.toUpperCase()) && bodyMode !== 'none') {
+      if (!['GET', 'HEAD'].includes(method) && bodyMode !== 'none') {
         if (bodyMode === 'json') {
-          requestInit.body = JSON.stringify(body);
-          if (!headers['Content-Type']) {
-            (requestInit.headers as Record<string, string>)['Content-Type'] =
-              'application/json';
+          const bodyObject = parseJsonObject(bodyText, '请求体');
+          requestInit.body = JSON.stringify(bodyObject);
+          if (!(headers as Record<string, string>)['Content-Type']) {
+            (requestInit.headers as Record<string, string>)['Content-Type'] = 'application/json';
           }
         } else {
           requestInit.body = bodyText;
@@ -453,238 +191,293 @@ const InterfaceDetailPage: React.FC = () => {
       }
 
       const start = performance.now();
-      const response = await fetch(targetUrl.toString(), requestInit);
+      const response = await fetch(url.toString(), requestInit);
       const end = performance.now();
-
       const text = await response.text();
-      setResponseStatus(response.status);
-      setResponseDuration(Math.round(end - start));
-      setResponseText(text || '(空响应)');
+
+      setRespStatus(response.status);
+      setRespCost(Math.round(end - start));
+      setRespText(text || '(空响应)');
     } catch (error) {
-      const message =
-        error instanceof Error && error.message
-          ? error.message
-          : '调试请求失败，请检查参数与网络';
+      const message = error instanceof Error ? error.message : '调试请求失败';
       setDebugError(message);
     } finally {
       setDebugLoading(false);
     }
   };
 
-  const editorLineNo = useMemo(() => {
-    const lines = Math.max(currentEditorText.split('\n').length, 8);
-    return Array.from({ length: lines }, (_, i) => i + 1).join('\n');
-  }, [currentEditorText]);
+  const requestParamsData = [
+    {
+      key: 'none',
+      name: '无',
+      example: '暂无',
+      required: '否',
+      type: 'string',
+      desc: '无',
+    },
+  ];
+
+  const responseParamsData = [
+    { key: 'code', name: 'code', type: 'int', desc: '响应码' },
+    { key: 'data', name: 'data.text', type: 'string', desc: '返回业务数据' },
+    { key: 'message', name: 'message', type: 'string', desc: '响应描述' },
+  ];
+
+  const exampleCode = `{
+  "code": 0,
+  "data": {
+    "text": "示例返回值"
+  },
+  "message": "ok"
+}`;
+
+  const fetchSnippet = `const headers = ${headerJson || '{}'};
+
+fetch("${baseUrl}${path}", {
+  method: "${method}",
+  headers,
+  body: ${bodyMode === 'json' ? bodyText || '{}' : '""'},
+})
+  .then(res => res.text())
+  .then(console.log)
+  .catch(console.error);`;
 
   return (
     <PageContainer
       title="接口详情"
-      subTitle={
-        interfaceInfo?.name ||
-        query.get('interfaceName') ||
-        `接口 #${interfaceId}`
-      }
+      subTitle={info?.name || query.get('interfaceName') || `接口 #${interfaceId}`}
       extra={[
         <Button
           key="back"
           icon={<ArrowLeftOutlined />}
-          onClick={() =>
-            history.push(
-              `/apps/${appId}/interfaces?appName=${encodeURIComponent(appName)}`,
-            )
-          }
+          onClick={() => history.push(`/apps/${appId}/interfaces?appName=${encodeURIComponent(appName)}`)}
         >
           返回接口列表
         </Button>,
-        <Button
-          key="refresh"
-          icon={<ReloadOutlined />}
-          onClick={fetchInterfaceInfo}
-        >
+        <Button key="refresh" icon={<ReloadOutlined />} onClick={fetchDetail}>
           刷新详情
         </Button>,
       ]}
     >
       <Card style={{ marginBottom: 16 }}>
-        <Space direction="vertical" style={{ width: '100%' }} size={8}>
+        <Space size={12} wrap>
           <Typography.Text type="secondary">应用：{appName}</Typography.Text>
-          <Typography.Text>
-            <strong>描述：</strong>
-            {interfaceInfo?.description || '暂无描述'}
-          </Typography.Text>
-          <Typography.Text>
-            <strong>方法：</strong>
-            <Tag color="blue">{method}</Tag>
-          </Typography.Text>
+          <Tag color="blue">{method}</Tag>
+          <Typography.Text>{info?.url || `${baseUrl}${path}`}</Typography.Text>
         </Space>
       </Card>
 
-      {errorMessage ? (
-        <Alert
-          type="error"
-          showIcon
-          message="接口详情加载失败"
-          description={errorMessage}
-          style={{ marginBottom: 16 }}
-        />
-      ) : null}
+      {errorMessage ? <Alert type="error" showIcon message={errorMessage} style={{ marginBottom: 16 }} /> : null}
 
       {loading ? (
         <Card>
-          <div style={{ textAlign: 'center', padding: '64px 0' }}>
+          <div style={{ textAlign: 'center', padding: 64 }}>
             <Spin size="large" />
           </div>
         </Card>
       ) : (
-        <>
-          <Card className={styles.requestCard} bodyStyle={{ padding: 0 }}>
-            <div className={styles.requestTop}>
-              <button
-                type="button"
-                className={styles.methodBtn}
-                onClick={() => {
-                  const cycle = ['GET', 'POST', 'PUT', 'DELETE'];
-                  const next = cycle[(cycle.indexOf(method) + 1) % cycle.length];
-                  setMethod(next);
-                }}
-              >
-                {method}
-                <DownOutlined style={{ fontSize: 12 }} />
-              </button>
-
-              <div className={styles.urlBar}>
-                <Input
-                  value={baseUrl}
-                  onChange={(event) => setBaseUrl(event.target.value)}
-                  className={styles.baseInput}
-                />
-                <Input
-                  value={path}
-                  onChange={(event) => setPath(event.target.value)}
-                  className={styles.pathInput}
-                />
-              </div>
-
-              <Button
-                type="primary"
-                className={styles.sendBtn}
-                icon={<PlayCircleOutlined />}
-                loading={debugLoading}
-                onClick={onDebug}
-                disabled={!baseUrl.trim() || !path.trim()}
-              >
-                发送
-              </Button>
-            </div>
-
-            <div className={styles.tabs}>
-              {debugTabs.map((tab) => (
-                <button
-                  key={tab.key}
-                  type="button"
-                  className={styles.tabItem}
-                  data-active={activeTab === tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                >
-                  {tab.label}
-                  {tab.badge ? (
-                    <span className={styles.tabBadge}>{tab.badge}</span>
-                  ) : null}
-                </button>
-              ))}
-            </div>
-
-            <div className={styles.bodyModes}>
-              {bodyModes.map((mode) => (
-                <button
-                  key={mode.key}
-                  type="button"
-                  className={styles.modeItem}
-                  data-active={bodyMode === mode.key}
-                  onClick={() => setBodyMode(mode.key)}
-                >
-                  {mode.label}
-                </button>
-              ))}
-            </div>
-
-            <div className={styles.editorWrap}>
-              <div className={styles.editorToolbar}>
-                <Space>
-                  <Button size="small" className={styles.tinyBtn}>
-                    自动生成
-                  </Button>
-                  <Button size="small" className={styles.tinyBtn}>
-                    动态值
-                  </Button>
+        <Tabs
+          defaultActiveKey="doc"
+          items={[
+            {
+              key: 'doc',
+              label: (
+                <Space size={6}>
+                  <FileTextOutlined /> API文档
                 </Space>
-                <Typography.Text type="secondary">application/json</Typography.Text>
-              </div>
+              ),
+              children: (
+                <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                  <Typography.Title level={4} style={{ margin: 0 }}>
+                    请求参数说明：
+                  </Typography.Title>
+                  <Table
+                    size="middle"
+                    pagination={false}
+                    dataSource={requestParamsData}
+                    columns={[
+                      { title: '参数名称', dataIndex: 'name' },
+                      { title: '示例值', dataIndex: 'example' },
+                      { title: '必选', dataIndex: 'required' },
+                      { title: '类型', dataIndex: 'type' },
+                      { title: '描述', dataIndex: 'desc' },
+                    ]}
+                  />
 
-              <div className={styles.editorBox}>
+                  <Typography.Title level={4} style={{ margin: 0 }}>
+                    响应参数说明：错误码参照
+                  </Typography.Title>
+                  <Table
+                    size="middle"
+                    pagination={false}
+                    dataSource={responseParamsData}
+                    columns={[
+                      { title: '参数名称', dataIndex: 'name' },
+                      { title: '类型', dataIndex: 'type' },
+                      { title: '描述', dataIndex: 'desc' },
+                    ]}
+                  />
+
+                  <Typography.Title level={4} style={{ margin: 0 }}>
+                    返回示例：
+                  </Typography.Title>
+                  <Input.TextArea
+                    value={exampleCode}
+                    readOnly
+                    autoSize={{ minRows: 8, maxRows: 18 }}
+                    style={{ fontFamily: 'Consolas, Menlo, monospace' }}
+                  />
+                </Space>
+              ),
+            },
+            {
+              key: 'debug',
+              label: (
+                <Space size={6}>
+                  <BugOutlined /> 在线调试工具
+                </Space>
+              ),
+              children: (
+                <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                  <Card>
+                    <Row gutter={[12, 12]} align="middle">
+                      <Col xs={24} md={4}>
+                        <Select
+                          value={method}
+                          onChange={setMethod}
+                          style={{ width: '100%' }}
+                          options={['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].map((item) => ({
+                            label: item,
+                            value: item,
+                          }))}
+                        />
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <Input value={baseUrl} onChange={(event) => setBaseUrl(event.target.value)} placeholder="Base URL" />
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <Input value={path} onChange={(event) => setPath(event.target.value)} placeholder="Path" />
+                      </Col>
+                      <Col xs={24} md={4}>
+                        <Button
+                          type="primary"
+                          icon={<PlayCircleOutlined />}
+                          loading={debugLoading}
+                          onClick={runDebug}
+                          style={{ width: '100%' }}
+                        >
+                          发送
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card>
+
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} lg={8}>
+                      <Card title="查询参数 JSON">
+                        <Input.TextArea
+                          value={queryJson}
+                          onChange={(event) => setQueryJson(event.target.value)}
+                          autoSize={{ minRows: 8, maxRows: 18 }}
+                        />
+                      </Card>
+                    </Col>
+                    <Col xs={24} lg={8}>
+                      <Card title="请求头 JSON">
+                        <Input.TextArea
+                          value={headerJson}
+                          onChange={(event) => setHeaderJson(event.target.value)}
+                          autoSize={{ minRows: 8, maxRows: 18 }}
+                        />
+                      </Card>
+                    </Col>
+                    <Col xs={24} lg={8}>
+                      <Card
+                        title="请求体"
+                        extra={
+                          <Select
+                            size="small"
+                            value={bodyMode}
+                            onChange={setBodyMode}
+                            options={[
+                              { label: 'JSON', value: 'json' },
+                              { label: 'Text', value: 'text' },
+                              { label: 'XML', value: 'xml' },
+                              { label: 'None', value: 'none' },
+                            ]}
+                            style={{ width: 110 }}
+                          />
+                        }
+                      >
+                        <Input.TextArea
+                          value={bodyText}
+                          onChange={(event) => setBodyText(event.target.value)}
+                          autoSize={{ minRows: 8, maxRows: 18 }}
+                          disabled={bodyMode === 'none'}
+                        />
+                      </Card>
+                    </Col>
+                  </Row>
+
+                  {debugError ? <Alert type="error" showIcon message={debugError} /> : null}
+
+                  <Card title="响应结果">
+                    <Space style={{ marginBottom: 12 }}>
+                      <Tag color={respStatus && respStatus < 400 ? 'green' : 'red'}>
+                        状态码：{respStatus ?? '-'}
+                      </Tag>
+                      <Tag color="blue">耗时：{respCost !== null ? `${respCost}ms` : '-'}</Tag>
+                    </Space>
+                    <Input.TextArea
+                      value={respText}
+                      readOnly
+                      autoSize={{ minRows: 10, maxRows: 24 }}
+                      style={{ fontFamily: 'Consolas, Menlo, monospace' }}
+                      placeholder="发送请求后展示响应"
+                    />
+                  </Card>
+                </Space>
+              ),
+            },
+            {
+              key: 'error',
+              label: (
+                <Space size={6}>
+                  <ExclamationCircleOutlined /> 错误码参照
+                </Space>
+              ),
+              children: (
+                <Table
+                  rowKey="code"
+                  size="middle"
+                  pagination={false}
+                  dataSource={ERROR_CODE_ROWS}
+                  columns={[
+                    { title: '错误码', dataIndex: 'code' },
+                    { title: '名称', dataIndex: 'name' },
+                    { title: '说明', dataIndex: 'desc' },
+                  ]}
+                />
+              ),
+            },
+            {
+              key: 'example',
+              label: (
+                <Space size={6}>
+                  <CodeOutlined /> 示例代码
+                </Space>
+              ),
+              children: (
                 <Input.TextArea
-                  value={editorLineNo}
+                  value={fetchSnippet}
                   readOnly
-                  autoSize={{ minRows: 8, maxRows: 16 }}
-                  className={styles.lineNo}
+                  autoSize={{ minRows: 14, maxRows: 28 }}
+                  style={{ fontFamily: 'Consolas, Menlo, monospace' }}
                 />
-                <Input.TextArea
-                  value={currentEditorText}
-                  onChange={(event) => setCurrentEditorText(event.target.value)}
-                  className={styles.editorArea}
-                  autoSize={{ minRows: 8, maxRows: 16 }}
-                />
-              </div>
-            </div>
-          </Card>
-
-          {debugError ? (
-            <Alert
-              type="error"
-              showIcon
-              message="调试失败"
-              description={debugError}
-              style={{ marginTop: 16 }}
-            />
-          ) : null}
-
-          <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
-            <Col xs={24} md={8}>
-              <Card>
-                <Typography.Text type="secondary">状态码</Typography.Text>
-                <Typography.Title level={3} style={{ margin: '8px 0 0' }}>
-                  {responseStatus ?? '-'}
-                </Typography.Title>
-              </Card>
-            </Col>
-            <Col xs={24} md={8}>
-              <Card>
-                <Typography.Text type="secondary">耗时</Typography.Text>
-                <Typography.Title level={3} style={{ margin: '8px 0 0' }}>
-                  {responseDuration !== null ? `${responseDuration} ms` : '-'}
-                </Typography.Title>
-              </Card>
-            </Col>
-            <Col xs={24} md={8}>
-              <Card>
-                <Typography.Text type="secondary">接口状态</Typography.Text>
-                <Typography.Title level={3} style={{ margin: '8px 0 0' }}>
-                  {`${interfaceInfo?.status ?? ''}` === '1' ? '开启' : '关闭'}
-                </Typography.Title>
-              </Card>
-            </Col>
-          </Row>
-
-          <Card title="响应结果" style={{ marginTop: 16 }}>
-            <Input.TextArea
-              value={responseText}
-              readOnly
-              autoSize={{ minRows: 12, maxRows: 28 }}
-              className={styles.responseArea}
-              placeholder="点击“发送”后展示响应内容"
-            />
-          </Card>
-        </>
+              ),
+            },
+          ]}
+        />
       )}
     </PageContainer>
   );
