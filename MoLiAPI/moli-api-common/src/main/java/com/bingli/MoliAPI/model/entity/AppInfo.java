@@ -1,5 +1,6 @@
 package com.bingli.MoliAPI.model.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -12,7 +13,7 @@ import lombok.Data;
  * @TableName app_info
  */
 @Data
-public class AppInfo {
+public class AppInfo  implements Serializable {
     /**
      * 应用ID（主键）
      */
@@ -66,4 +67,6 @@ public class AppInfo {
      */
     @TableLogic
     private Integer isDelete;
+
+    private static final long serialVersionUID = 1L;
 }

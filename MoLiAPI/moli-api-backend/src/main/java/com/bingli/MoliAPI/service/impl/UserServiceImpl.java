@@ -89,7 +89,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             User user = new User();
             user.setUserAccount(userAccount);
             user.setUserPassword(encryptPassword);
-            user.setAccessKey(AESUtil.encrypt(accessKey));
+            user.setAccessKey(accessKey);
             user.setSecretKey(AESUtil.encrypt(secretKey));
             user.setStatus(0);
             user.setPoints(50);

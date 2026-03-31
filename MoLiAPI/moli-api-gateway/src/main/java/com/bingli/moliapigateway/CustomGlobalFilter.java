@@ -17,6 +17,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -196,16 +197,18 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
         log.info("转发目标地址: {}", targetUri);
 
-        // 10. 改写 request，完成真正的请求转发
+// 10. 改写 request + 设置网关真实路由地址
         ServerHttpRequest newRequest = request.mutate()
                 .uri(targetUri)
+                .header(HttpHeaders.HOST, targetUri.getHost() + (targetUri.getPort() > 0 ? ":" + targetUri.getPort() : ""))
                 .build();
 
         ServerWebExchange newExchange = exchange.mutate()
                 .request(newRequest)
                 .build();
 
-        // 11. 响应增强 + 调用统计
+        newExchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, targetUri);
+
         return handleResponse(newExchange, chain, interfaceInfo.getId(), invokeUser.getId());
     }
 
@@ -309,6 +312,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return -1;
+        return 10001;
     }
 }
