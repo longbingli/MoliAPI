@@ -43,7 +43,7 @@ import java.nio.charset.StandardCharsets;
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
     /**
-     * 时间戳允许误差：5分钟
+     * 时间戳允许误差：5 分钟
      */
     private static final long FIVE_MINUTES = 60 * 5L;
 
@@ -77,7 +77,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         log.info("请求参数: {}", request.getQueryParams());
         log.info("请求来源地址: {}", request.getRemoteAddress());
 
-        // 1. 获取请求头
         HttpHeaders headers = request.getHeaders();
         String accessKey = headers.getFirst("accessKey");
         String nonce = headers.getFirst("nonce");
@@ -85,12 +84,10 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         String sign = headers.getFirst("sign");
         String body = headers.getFirst("body");
 
-        // 2. 基础参数校验
         if (StringUtils.isAnyBlank(accessKey, nonce, timestamp, sign)) {
             return writeErrorResponse(response, ErrorCode.PARAMS_ERROR, "请求头参数不完整");
         }
 
-        // 3. 查询调用用户
         User invokeUser;
         try {
             invokeUser = userDubboService.getInvokeUser(accessKey);
@@ -103,7 +100,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             return writeErrorResponse(response, ErrorCode.NO_AUTH_ERROR, "用户不存在");
         }
 
-        // 4. nonce 校验
         try {
             long nonceValue = Long.parseLong(nonce);
             if (nonceValue > MAX_NONCE) {
@@ -115,7 +111,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             return writeErrorResponse(response, ErrorCode.PARAMS_ERROR, "nonce 格式错误");
         }
 
-        // 5. timestamp 校验
         try {
             long requestTime = Long.parseLong(timestamp);
             long currentTime = System.currentTimeMillis() / 1000;
@@ -128,7 +123,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             return writeErrorResponse(response, ErrorCode.PARAMS_ERROR, "timestamp 格式错误");
         }
 
-        // 6. 验签
         String secretKey;
         try {
             secretKey = AESUtil.decrypt(invokeUser.getSecretKey());
@@ -150,7 +144,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             return writeErrorResponse(response, ErrorCode.NO_AUTH_ERROR, "密钥非法");
         }
 
-        // 7. 查询接口信息
         InterfaceInfo interfaceInfo;
         try {
             interfaceInfo = interfaceInfoDubboService.getInterfaceInfo(path, method);
@@ -168,7 +161,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             return writeErrorResponse(response, ErrorCode.FORBIDDEN_ERROR, "接口已关闭");
         }
 
-        // 8. 根据 appId 查询唯一 host
         String interfaceHost;
         try {
             interfaceHost = appInfoDubboService.getAppHostByAppId(interfaceInfo.getAppId());
@@ -182,36 +174,27 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             return writeErrorResponse(response, ErrorCode.NOT_FOUND_ERROR, "下游服务不存在或未配置");
         }
 
-        // 9. 构造真正转发地址
         URI targetUri;
         try {
-            UriComponentsBuilder uriBuilder = UriComponentsBuilder
-                    .fromHttpUrl(interfaceHost)
-                    .path(path);
-
+            UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(interfaceHost).path(path);
             String rawQuery = request.getURI().getRawQuery();
             if (StringUtils.isNotBlank(rawQuery)) {
                 uriBuilder.query(rawQuery);
             }
-
             targetUri = uriBuilder.build(true).toUri();
         } catch (Exception e) {
             log.error("构造目标 URI 失败, host={}, path={}", interfaceHost, path, e);
-            return writeErrorResponse(response, ErrorCode.SYSTEM_ERROR, "构造目标URI失败");
+            return writeErrorResponse(response, ErrorCode.SYSTEM_ERROR, "构造目标 URI 失败");
         }
 
         log.info("转发目标地址: {}", targetUri);
 
-// 10. 改写 request + 设置网关真实路由地址
         ServerHttpRequest newRequest = request.mutate()
                 .uri(targetUri)
                 .header(HttpHeaders.HOST, targetUri.getHost() + (targetUri.getPort() > 0 ? ":" + targetUri.getPort() : ""))
                 .build();
 
-        ServerWebExchange newExchange = exchange.mutate()
-                .request(newRequest)
-                .build();
-
+        ServerWebExchange newExchange = exchange.mutate().request(newRequest).build();
         newExchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, targetUri);
 
         return handleResponse(newExchange, chain, interfaceInfo.getId(), invokeUser.getId());
@@ -241,33 +224,41 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
                         String responseData = new String(content, StandardCharsets.UTF_8);
                         log.info("响应结果: {}", responseData);
-
-                        // 仅在成功响应时统计调用次数和扣减积分（每次请求只执行一次）
-                        HttpStatusCode currentStatus = getStatusCode();
-                        boolean success = currentStatus == null || currentStatus.is2xxSuccessful();
-                        if (success) {
-                            try {
-                                interfaceInfoDubboService.invokeCount(interfaceInfoId, userId);
-                            } catch (Exception e) {
-                                log.error("调用次数统计失败", e);
-                            }
-                        }
-
                         return super.writeWith(Mono.just(bufferFactory.wrap(content)));
                     });
                 }
 
                 @Override
                 public Mono<Void> writeAndFlushWith(Publisher<? extends Publisher<? extends DataBuffer>> body) {
-                    // 兼容分块响应，统一走 writeWith，确保统计和扣分逻辑一定执行
-                    return writeWith(Flux.from(body).flatMapSequential(p -> p));
+                    // 兼容分块响应，统一转换成单流处理
+                    return writeWith(Flux.from(body).flatMapSequential(publisher -> publisher));
                 }
             };
 
-            return chain.filter(exchange.mutate().response(decoratedResponse).build());
+            return chain.filter(exchange.mutate().response(decoratedResponse).build())
+                    .then(Mono.fromRunnable(() -> recordInvokeSuccess(originalResponse, interfaceInfoId, userId)));
         } catch (Exception e) {
             log.error("处理网关响应异常", e);
             return writeErrorResponse(exchange.getResponse(), ErrorCode.SYSTEM_ERROR, "网关处理响应异常");
+        }
+    }
+
+    /**
+     * 仅在转发成功后统计次数和扣减积分
+     */
+    private void recordInvokeSuccess(ServerHttpResponse response, long interfaceInfoId, long userId) {
+        HttpStatusCode currentStatus = response.getStatusCode();
+        boolean success = currentStatus == null || currentStatus.is2xxSuccessful();
+        if (!success) {
+            log.warn("调用未成功，不统计次数和积分, interfaceInfoId={}, userId={}, status={}",
+                    interfaceInfoId, userId, currentStatus);
+            return;
+        }
+        try {
+            interfaceInfoDubboService.invokeCount(interfaceInfoId, userId);
+            log.info("调用统计成功, interfaceInfoId={}, userId={}", interfaceInfoId, userId);
+        } catch (Exception e) {
+            log.error("调用次数统计或扣分失败, interfaceInfoId={}, userId={}", interfaceInfoId, userId, e);
         }
     }
 
@@ -294,7 +285,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
     /**
      * 统一错误返回
-     * 这里 HTTP 状态码固定返回 200，业务状态看 code
      */
     private Mono<Void> writeErrorResponse(ServerHttpResponse response,
                                           ErrorCode errorCode,
@@ -302,16 +292,10 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         return writeJsonResponse(response, HttpStatus.OK, ResultUtils.error(errorCode, message));
     }
 
-    /**
-     * 无权限
-     */
     public Mono<Void> handleNoAuth(ServerHttpResponse response) {
         return writeErrorResponse(response, ErrorCode.NO_AUTH_ERROR, "无权限");
     }
 
-    /**
-     * 调用异常
-     */
     public Mono<Void> handleInvokeError(ServerHttpResponse response) {
         return writeErrorResponse(response, ErrorCode.SYSTEM_ERROR, "系统内部异常");
     }
