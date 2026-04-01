@@ -24,6 +24,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -118,8 +120,25 @@ public class DemoController {
         invokeResponse.setStatusCode(downstreamResponse.getStatus());
         invokeResponse.setDurationMs(end - start);
         invokeResponse.setBody(downstreamResponse.body());
-        invokeResponse.setHeaders(downstreamResponse.headers());
+        invokeResponse.setHeaders(cleanResponseHeaders(downstreamResponse.headers()));
 
         return ResultUtils.success(invokeResponse);
+    }
+
+    /**
+     * 清洗下游响应头，避免 null key 导致 JSON 序列化失败
+     */
+    private Map<String, List<String>> cleanResponseHeaders(Map<String, List<String>> headers) {
+        Map<String, List<String>> result = new LinkedHashMap<>();
+        if (headers == null || headers.isEmpty()) {
+            return result;
+        }
+        headers.forEach((key, value) -> {
+            if (StringUtils.isBlank(key)) {
+                return;
+            }
+            result.put(key, value);
+        });
+        return result;
     }
 }
