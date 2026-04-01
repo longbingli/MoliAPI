@@ -112,7 +112,7 @@ const InterfaceManagePage: React.FC = () => {
     form.resetFields();
     form.setFieldsValue({
       method: 'POST',
-      status: 1,
+      status: 0,
       requestHeader: '',
       responseHeader: '',
       requestParams: '',
@@ -131,7 +131,7 @@ const InterfaceManagePage: React.FC = () => {
       description: item.description || '',
       url: item.url || '',
       method: item.method || 'POST',
-      status: Number(item.status ?? 1),
+      status: Number(item.status ?? 0),
       requestHeader: item.requestHeader || '',
       responseHeader: item.responseHeader || '',
       requestParams: item.requestParams || '',
@@ -206,7 +206,7 @@ const InterfaceManagePage: React.FC = () => {
 
   const statusTag = (value?: number | string) => {
     const status = String(value ?? '0');
-    return <Tag color={status === '1' ? 'green' : 'default'}>{status === '1' ? '启用' : '禁用'}</Tag>;
+    return <Tag color={status === '0' ? 'green' : 'default'}>{status === '0' ? '启用' : '禁用'}</Tag>;
   };
 
   const columns = useMemo(
@@ -390,8 +390,8 @@ const InterfaceManagePage: React.FC = () => {
             >
               <Select
                 options={[
-                  { label: '启用', value: 1 },
-                  { label: '禁用', value: 0 },
+                  { label: '启用', value: 0 },
+                  { label: '禁用', value: 1 },
                 ]}
               />
             </Form.Item>

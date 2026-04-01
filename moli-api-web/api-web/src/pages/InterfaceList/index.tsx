@@ -220,8 +220,8 @@ const InterfaceListPage: React.FC = () => {
                 <Card
                   title={item.name || `接口 #${item.id ?? '-'}`}
                   extra={
-                    <Tag color={`${item.status ?? ''}` === '1' ? 'green' : 'default'}>
-                      {`${item.status ?? ''}` === '1' ? '开启' : '关闭'}
+                    <Tag color={`${item.status ?? ''}` === '0' ? 'green' : 'default'}>
+                      {`${item.status ?? ''}` === '0' ? '开启' : '关闭'}
                     </Tag>
                   }
                   style={{ height: '100%' }}

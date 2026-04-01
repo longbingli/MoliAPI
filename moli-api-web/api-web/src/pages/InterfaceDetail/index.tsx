@@ -486,7 +486,7 @@ fetch("${baseUrl}${path}", {
   const gatewayAddress =
     appGatewayHost || (/^https?:\/\//i.test(baseUrl) ? baseUrl : window.location.origin);
   const interfaceAddress = info?.url || `${baseUrl}${path}`;
-  const interfaceStatus = `${info?.status ?? ''}` === '1' ? '开启' : '关闭';
+  const interfaceStatus = `${info?.status ?? ''}` === '0' ? '开启' : '关闭';
   const interfaceDescription = info?.description || '暂无描述';
 
   return (
@@ -767,3 +767,4 @@ fetch("${baseUrl}${path}", {
 };
 
 export default InterfaceDetailPage;
+

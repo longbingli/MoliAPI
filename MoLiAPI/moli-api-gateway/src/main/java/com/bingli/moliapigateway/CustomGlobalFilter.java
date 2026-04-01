@@ -163,6 +163,10 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             log.error("接口不存在, path={}, method={}", path, method);
             return writeErrorResponse(response, ErrorCode.NOT_FOUND_ERROR, "接口不存在或已关闭");
         }
+        if (interfaceInfo.getStatus() != null && interfaceInfo.getStatus() == 1) {
+            log.warn("接口已关闭, interfaceId={}, path={}, method={}", interfaceInfo.getId(), path, method);
+            return writeErrorResponse(response, ErrorCode.FORBIDDEN_ERROR, "接口已关闭");
+        }
 
         // 8. 根据 appId 查询唯一 host
         String interfaceHost;
@@ -251,6 +255,12 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
                         return super.writeWith(Mono.just(bufferFactory.wrap(content)));
                     });
+                }
+
+                @Override
+                public Mono<Void> writeAndFlushWith(Publisher<? extends Publisher<? extends DataBuffer>> body) {
+                    // 兼容分块响应，统一走 writeWith，确保统计和扣分逻辑一定执行
+                    return writeWith(Flux.from(body).flatMapSequential(p -> p));
                 }
             };
 
