@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bingli.MoliAPI.common.ErrorCode;
 import com.bingli.MoliAPI.exception.ThrowUtils;
+import com.bingli.MoliAPI.manager.UserPointManager;
 import com.bingli.MoliAPI.model.entity.AppInfo;
 import com.bingli.MoliAPI.model.entity.InterfaceInfo;
 import com.bingli.MoliAPI.service.AppInfoService;
@@ -24,6 +25,9 @@ public class InterfaceInfoDubboServiceImpl implements InterfaceInfoDubboService 
     @Resource
     private AppInfoService appInfoService;
 
+    @Resource
+    private UserPointManager userPointManager;
+
     @Override
     public InterfaceInfo getInterfaceInfo(String path, String method) {
         ThrowUtils.throwIf(StringUtils.isAnyBlank(path, method), ErrorCode.PARAMS_ERROR, "参数为空");
@@ -41,25 +45,34 @@ public class InterfaceInfoDubboServiceImpl implements InterfaceInfoDubboService 
     public void invokeCount(long interfaceInfoId, long userId) {
         ThrowUtils.throwIf(interfaceInfoId <= 0 || userId <= 0, ErrorCode.PARAMS_ERROR, "参数非法");
 
-        // 1. 查询接口是否存在
+        // 1. 查询接口和应用信息
         InterfaceInfo interfaceInfo = interfaceInfoService.getById(interfaceInfoId);
         ThrowUtils.throwIf(interfaceInfo == null, ErrorCode.NOT_FOUND_ERROR, "接口信息不存在");
 
         Long appId = interfaceInfo.getAppId();
         ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.NOT_FOUND_ERROR, "接口未关联应用");
 
+        AppInfo appInfo = appInfoService.getById(appId);
+        ThrowUtils.throwIf(appInfo == null, ErrorCode.NOT_FOUND_ERROR, "应用信息不存在");
+
         // 2. 接口调用次数原子 +1
         boolean interfaceUpdateResult = interfaceInfoService.lambdaUpdate()
                 .eq(InterfaceInfo::getId, interfaceInfoId)
-                .setSql("total_num = IFNULL(total_num, 0) + 1")
+                .setSql("totalNum = IFNULL(totalNum, 0) + 1")
                 .update();
         ThrowUtils.throwIf(!interfaceUpdateResult, ErrorCode.OPERATION_ERROR, "接口调用次数更新失败");
 
         // 3. 应用调用次数原子 +1
         boolean appUpdateResult = appInfoService.lambdaUpdate()
                 .eq(AppInfo::getAppId, appId)
-                .setSql("total_num = IFNULL(total_num, 0) + 1")
+                .setSql("totalNum = IFNULL(totalNum, 0) + 1")
                 .update();
         ThrowUtils.throwIf(!appUpdateResult, ErrorCode.OPERATION_ERROR, "应用调用次数更新失败");
+
+        // 4. 按应用配置扣减积分（<=0 表示不扣）
+        Integer deductPoints = appInfo.getDeductPoints();
+        if (deductPoints != null && deductPoints > 0) {
+            userPointManager.subtractPointsWithCheck(userId, deductPoints);
+        }
     }
 }

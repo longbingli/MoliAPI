@@ -9,6 +9,8 @@
             <result property="appName" column="appName" />
             <result property="description" column="description" />
             <result property="host" column="host" />
+            <result property="totalNum" column="totalNum" />
+            <result property="deductPoints" column="deductPoints" />
             <result property="userId" column="userId" />
             <result property="status" column="status" />
             <result property="createTime" column="createTime" />
@@ -17,7 +19,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        appId,appName,description,host,userId,status,
+        appId,appName,description,host,totalNum,deductPoints,userId,status,
         createTime,updateTime,isDelete
     </sql>
 </mapper>

@@ -24,26 +24,22 @@ public class UserPointManager {
     private RedisTemplate<String, Object> redisTemplate;
 
     /**
-     * 最大积分变更值
+     * 增加积分时允许的单次最大变更值
      */
     private static final long MAX_CHANGE_AMOUNT = 60;
+
     /**
-     * 最大积分
+     * 用户积分上限
      */
     private static final long MAX_SCORE = 99999;
 
-
     /**
      * 增加积分
-     *
-     * @param userId 用户 id
-     * @param amount 增加积分
-     * @return 是否成功
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean addPoints(Long userId, long amount, String requestId) {
         validateUserId(userId);
-        validateAmount(amount);
+        validateAmountForAdd(amount);
         checkRateLimit(userId);
         checkIdempotent(requestId);
 
@@ -54,17 +50,12 @@ public class UserPointManager {
     }
 
     /**
-     * 扣减积分
-     * 通过 points >= amount 防止并发超扣
-     *
-     * @param userId 用户 id
-     * @param amount 扣减积分
-     * @return 是否成功
+     * 扣减积分（通过 points >= amount 防止并发超扣）
      */
     @Transactional(rollbackFor = Exception.class)
     public boolean subtractPoints(Long userId, long amount) {
         validateUserId(userId);
-        validateAmount(amount);
+        validateAmountForSubtract(amount);
 
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", userId)
@@ -75,24 +66,16 @@ public class UserPointManager {
     }
 
     /**
-     * 扣减积分，失败直接抛异常
-     *
-     * @param userId 用户 id
-     * @param amount 扣减积分
+     * 扣减积分并校验
      */
     @Transactional(rollbackFor = Exception.class)
     public void subtractPointsWithCheck(Long userId, long amount) {
         boolean success = subtractPoints(userId, amount);
         ThrowUtils.throwIf(!success, ErrorCode.OPERATION_ERROR, "积分不足");
-
     }
 
-
-
-
-
     /**
-     * 校验 userId
+     * 校验用户
      */
     private void validateUserId(Long userId) {
         ThrowUtils.throwIf(userId == null || userId <= 0, ErrorCode.PARAMS_ERROR, "用户Id非法");
@@ -102,12 +85,21 @@ public class UserPointManager {
     }
 
     /**
-     * 校验积分值
+     * 增加积分时的额度校验
      */
-    private void validateAmount(long amount) {
-        ThrowUtils.throwIf(amount <= 0, ErrorCode.PARAMS_ERROR, "积分变更值必须大于 0");
+    private void validateAmountForAdd(long amount) {
+        ThrowUtils.throwIf(amount <= 0, ErrorCode.PARAMS_ERROR, "积分变更值必须大于0");
         ThrowUtils.throwIf(amount > MAX_CHANGE_AMOUNT, ErrorCode.PARAMS_ERROR, "操作非法");
     }
+
+    /**
+     * 扣减积分时允许更大额度，只限制不能超过积分上限
+     */
+    private void validateAmountForSubtract(long amount) {
+        ThrowUtils.throwIf(amount <= 0, ErrorCode.PARAMS_ERROR, "积分变更值必须大于0");
+        ThrowUtils.throwIf(amount > MAX_SCORE, ErrorCode.PARAMS_ERROR, "操作非法");
+    }
+
     /**
      * 检查操作频率
      */
@@ -123,8 +115,9 @@ public class UserPointManager {
                 ErrorCode.OPERATION_ERROR,
                 "操作过于频繁，请稍后再试");
     }
-      /**
-     * 检查幂等性
+
+    /**
+     * 检查幂等
      */
     private void checkIdempotent(String requestId) {
         ThrowUtils.throwIf(StringUtils.isBlank(requestId),

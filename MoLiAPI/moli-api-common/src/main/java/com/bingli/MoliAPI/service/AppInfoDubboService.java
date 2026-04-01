@@ -1,16 +1,19 @@
 package com.bingli.MoliAPI.service;
 
-
+import com.bingli.MoliAPI.model.entity.AppInfo;
 
 /**
- * @Description:
- * @Author: bingli
- * @Date: 2021/9/27 10:05 上午
- **/
+ * 应用 Dubbo 服务
+ */
 public interface AppInfoDubboService {
 
-//   String getAppInfoHosts(String path, String method);
+    /**
+     * 根据 appId 获取下游 host
+     */
+    String getAppHostByAppId(Long appId);
 
-   String getAppHostByAppId(Long appId);
-
+    /**
+     * 根据 appId 获取应用信息
+     */
+    AppInfo getAppInfoByAppId(Long appId);
 }

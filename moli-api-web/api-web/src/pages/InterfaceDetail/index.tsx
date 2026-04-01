@@ -27,6 +27,7 @@ import {
 } from 'antd';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getInterfaceInfoById } from '@/services/interfaceInfo';
+import { forwardInvoke } from '@/services/invoke';
 
 const SUCCESS_CODE = 0;
 
@@ -84,6 +85,18 @@ const formatResponseText = (text: string, contentType: string) => {
   } catch (_error) {
     return { text: raw, format: 'text' as const };
   }
+};
+
+const pickContentType = (headers?: Record<string, string[]>) => {
+  if (!headers) {
+    return '';
+  }
+  const headerKey = Object.keys(headers).find((key) => key.toLowerCase() === 'content-type');
+  if (!headerKey) {
+    return '';
+  }
+  const values = headers[headerKey];
+  return Array.isArray(values) && values.length > 0 ? values[0] : '';
 };
 
 const normalizeApiPath = (value: string) => {
@@ -234,41 +247,48 @@ const InterfaceDetailPage: React.FC = () => {
       const requestUrl = buildRequestUrl(baseUrl, path);
       const url = new URL(requestUrl);
       const queryParams = parseJsonObject(queryJson, '查询参数');
-      const headers = parseJsonObject(headerJson, '请求头');
+      const headers = parseJsonObject(headerJson, '请求头') as Record<string, string>;
+      const mergedQueryParams: Record<string, string> = {};
 
+      url.searchParams.forEach((value, key) => {
+        mergedQueryParams[key] = value;
+      });
       Object.entries(queryParams).forEach(([key, value]) => {
         if (value !== null && value !== undefined && `${value}`.length > 0) {
-          url.searchParams.set(key, String(value));
+          mergedQueryParams[key] = String(value);
         }
       });
 
-      const requestInit: RequestInit = {
-        method,
-        headers,
-        credentials: 'include',
-      };
-
+      let body = '';
       if (!['GET', 'HEAD'].includes(method) && bodyMode !== 'none') {
         if (bodyMode === 'json') {
           const bodyObject = parseJsonObject(bodyText, '请求体');
-          requestInit.body = JSON.stringify(bodyObject);
-          if (!(headers as Record<string, string>)['Content-Type']) {
-            (requestInit.headers as Record<string, string>)['Content-Type'] = 'application/json';
+          body = JSON.stringify(bodyObject);
+          if (!Object.keys(headers).some((key) => key.toLowerCase() === 'content-type')) {
+            headers['Content-Type'] = 'application/json';
           }
         } else {
-          requestInit.body = bodyText;
+          body = bodyText;
         }
       }
 
-      const start = performance.now();
-      const response = await fetch(url.toString(), requestInit);
-      const end = performance.now();
-      const text = await response.text();
-      const contentType = response.headers.get('content-type') || '';
-      const formatted = formatResponseText(text, contentType);
+      const invokeRes = await forwardInvoke({
+        method,
+        path: url.pathname,
+        queryParams: mergedQueryParams,
+        headers,
+        body,
+      });
 
-      setRespStatus(response.status);
-      setRespCost(Math.round(end - start));
+      if (invokeRes.code !== SUCCESS_CODE || !invokeRes.data) {
+        throw new Error(invokeRes.message || '调试请求失败');
+      }
+
+      const contentType = pickContentType(invokeRes.data.headers);
+      const formatted = formatResponseText(invokeRes.data.body || '', contentType);
+
+      setRespStatus(invokeRes.data.statusCode ?? null);
+      setRespCost(invokeRes.data.durationMs ?? null);
       setRespText(formatted.text);
       setRespFormat(formatted.format);
     } catch (error) {
