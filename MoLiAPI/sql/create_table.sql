@@ -1,4 +1,4 @@
-﻿# 鏁版嵁搴撳垵濮嬪寲
+# 鏁版嵁搴撳垵濮嬪寲
 
 CREATE DATABASE IF NOT EXISTS MoLiAPI;
 USE MoLiAPI;
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `app_info`
 -- 鎺ュ彛淇℃伅琛?CREATE TABLE IF NOT EXISTS `interface_info`
 (
     `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '涓婚敭',
-    `appId` INT NOT NULL COMMENT 'appId',
+    `appId` BIGINT NOT NULL COMMENT 'appId',
     `name` VARCHAR(256) NOT NULL COMMENT '鍚嶇О',
     `description` VARCHAR(256) NULL DEFAULT NULL COMMENT '鎻忚堪',
     `url` VARCHAR(512) NOT NULL COMMENT '鎺ュ彛鍦板潃',
@@ -95,5 +95,6 @@ CREATE TABLE IF NOT EXISTS `app_info`
     `isDelete` TINYINT NOT NULL DEFAULT 0 COMMENT '鏄惁鍒犻櫎(0-鏈垹, 1-宸插垹)',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '鎺ュ彛淇℃伅' ROW_FORMAT = Dynamic;
+
 
 
