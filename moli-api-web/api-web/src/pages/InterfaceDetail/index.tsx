@@ -8,7 +8,7 @@
   ReloadOutlined,
 } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
-import { history, useLocation, useParams } from '@umijs/max';
+import { history, useLocation, useModel, useParams } from '@umijs/max';
 import {
   Alert,
   Button,
@@ -276,6 +276,7 @@ const splitUrl = (url?: string) => {
 };
 
 const InterfaceDetailPage: React.FC = () => {
+  const { initialState, setInitialState } = useModel('@@initialState');
   const { appId, interfaceId } = useParams<{ appId: string; interfaceId: string }>();
   const location = useLocation();
   const query = useMemo(() => new URLSearchParams(location.search), [location.search]);
@@ -439,6 +440,15 @@ const InterfaceDetailPage: React.FC = () => {
       setRespCost(invokeRes.data.durationMs ?? null);
       setRespText(formatted.text);
       setRespFormat(formatted.format);
+
+      // 调试成功后刷新当前用户，前端积分展示会同步更新
+      if (initialState?.fetchUserInfo) {
+        const freshUser = await initialState.fetchUserInfo();
+        setInitialState((state) => ({
+          ...state,
+          currentUser: freshUser,
+        }));
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : '调试请求失败';
       setDebugError(message);

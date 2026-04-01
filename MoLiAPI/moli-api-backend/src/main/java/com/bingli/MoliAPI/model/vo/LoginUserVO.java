@@ -39,6 +39,10 @@ public class LoginUserVO implements Serializable {
 
     private String accessKey;
     private String secretKey;
+    /**
+     * 当前积分
+     */
+    private Integer points;
 
     /**
      * 创建时间

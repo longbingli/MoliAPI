@@ -69,6 +69,7 @@ const SiderUserCard: React.FC<SiderUserCardProps> = ({ collapsed }) => {
             <Typography.Text strong>{displayName}</Typography.Text>
             <div style={{ marginTop: 4, marginBottom: 6 }}>
               <Tag color="blue">{role}</Tag>
+              <Tag color="gold">积分 {currentUser.points ?? 0}</Tag>
             </div>
             <Typography.Paragraph type="secondary" ellipsis={{ rows: 2 }} style={{ marginBottom: 8 }}>
               {profile}

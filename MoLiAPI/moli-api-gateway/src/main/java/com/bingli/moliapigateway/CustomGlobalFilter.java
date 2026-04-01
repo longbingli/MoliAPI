@@ -227,37 +227,30 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             ServerHttpResponseDecorator decoratedResponse = new ServerHttpResponseDecorator(originalResponse) {
                 @Override
                 public Mono<Void> writeWith(Publisher<? extends DataBuffer> body) {
-                    if (body instanceof Flux) {
-                        Flux<? extends DataBuffer> fluxBody = Flux.from(body);
-
-                        return super.writeWith(
-                                fluxBody.map(dataBuffer -> {
-                                    byte[] content = new byte[dataBuffer.readableByteCount()];
-                                    dataBuffer.read(content);
-                                    DataBufferUtils.release(dataBuffer);
-
-                                    String responseData = new String(content, StandardCharsets.UTF_8);
-                                    log.info("响应结果: {}", responseData);
-
-                                    // 只有响应成功才统计调用次数
-                                    HttpStatusCode currentStatus = getStatusCode();
-                                    boolean success = currentStatus == null || currentStatus.is2xxSuccessful();
-                                    if (success) {
-                                        try {
-                                            interfaceInfoDubboService.invokeCount(interfaceInfoId, userId);
-
-                                        } catch (Exception e) {
-                                            log.error("调用次数统计失败", e);
-                                        }
-                                    }
-
-                                    return bufferFactory.wrap(content);
-                                })
-                        );
+                    if (body == null) {
+                        return super.writeWith(body);
                     }
+                    return DataBufferUtils.join(Flux.from(body)).flatMap(dataBuffer -> {
+                        byte[] content = new byte[dataBuffer.readableByteCount()];
+                        dataBuffer.read(content);
+                        DataBufferUtils.release(dataBuffer);
 
-                    log.warn("响应体不是 Flux，status={}", getStatusCode());
-                    return super.writeWith(body);
+                        String responseData = new String(content, StandardCharsets.UTF_8);
+                        log.info("响应结果: {}", responseData);
+
+                        // 仅在成功响应时统计调用次数和扣减积分（每次请求只执行一次）
+                        HttpStatusCode currentStatus = getStatusCode();
+                        boolean success = currentStatus == null || currentStatus.is2xxSuccessful();
+                        if (success) {
+                            try {
+                                interfaceInfoDubboService.invokeCount(interfaceInfoId, userId);
+                            } catch (Exception e) {
+                                log.error("调用次数统计失败", e);
+                            }
+                        }
+
+                        return super.writeWith(Mono.just(bufferFactory.wrap(content)));
+                    });
                 }
             };
 

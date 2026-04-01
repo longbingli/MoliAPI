@@ -16,6 +16,7 @@ declare namespace API {
     userRole?: string;
     accessKey?: string;
     secretKey?: string;
+    points?: number;
     ak?: string;
     sk?: string;
     createTime?: string;

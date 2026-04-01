@@ -104,6 +104,9 @@ const AccountCenterPage: React.FC = () => {
             <Typography.Text type="secondary">
               注册时间：{currentUser?.createTime || '-'}
             </Typography.Text>
+            <Typography.Text type="secondary">
+              当前积分：{currentUser?.points ?? 0}
+            </Typography.Text>
           </Space>
         </Space>
       </div>

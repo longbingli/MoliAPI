@@ -6,8 +6,6 @@ import lombok.Data;
 
 /**
  * 用户视图（脱敏）
- *
-
  */
 @Data
 public class UserVO implements Serializable {
@@ -33,9 +31,14 @@ public class UserVO implements Serializable {
     private String userProfile;
 
     /**
-     * 用户角色：user/admin/ban
+     * 用户角色（user/admin/ban）
      */
     private String userRole;
+
+    /**
+     * 当前积分
+     */
+    private Integer points;
 
     /**
      * 创建时间
