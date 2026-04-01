@@ -32,6 +32,14 @@ import { forwardInvoke } from '@/services/invoke';
 const SUCCESS_CODE = 0;
 
 type BodyMode = 'json' | 'text' | 'xml' | 'none';
+type RequestParamRow = {
+  key: string;
+  name: string;
+  example: string;
+  required: string;
+  type: string;
+  desc: string;
+};
 
 const ERROR_CODE_ROWS = [
   { code: 0, name: 'SUCCESS', desc: '请求成功' },
@@ -55,6 +63,112 @@ const parseJsonObject = (value: string, fieldName: string): Record<string, any> 
     throw new Error(`${fieldName} 必须是 JSON 对象`);
   }
   return parsed;
+};
+
+const tryParseJson = (value?: string) => {
+  if (!value || !value.trim()) {
+    return null;
+  }
+  try {
+    return JSON.parse(value);
+  } catch (_error) {
+    return null;
+  }
+};
+
+const inferExampleByType = (typeText?: string) => {
+  const type = (typeText || '').toLowerCase();
+  if (type.includes('int') || type.includes('long') || type.includes('number')) {
+    return 0;
+  }
+  if (type.includes('bool')) {
+    return false;
+  }
+  if (type.includes('array') || type.includes('list')) {
+    return [];
+  }
+  if (type.includes('object') || type.includes('map')) {
+    return {};
+  }
+  return '';
+};
+
+const buildRequestParamRows = (requestParams?: string): { rows: RequestParamRow[]; defaults: Record<string, any> } => {
+  const parsed = tryParseJson(requestParams);
+  const rows: RequestParamRow[] = [];
+  const defaults: Record<string, any> = {};
+
+  if (Array.isArray(parsed)) {
+    parsed.forEach((item, index) => {
+      if (!item || typeof item !== 'object') {
+        return;
+      }
+      const name = String(item.name ?? item.field ?? item.param ?? item.key ?? `param${index + 1}`);
+      const type = String(item.type ?? item.dataType ?? 'string');
+      const requiredRaw = item.required ?? item.isRequired ?? false;
+      const desc = String(item.desc ?? item.description ?? '');
+      const sample = item.example ?? item.defaultValue ?? inferExampleByType(type);
+      rows.push({
+        key: `${name}-${index}`,
+        name,
+        example: typeof sample === 'string' ? sample : JSON.stringify(sample),
+        required: requiredRaw ? '是' : '否',
+        type,
+        desc: desc || '-',
+      });
+      defaults[name] = sample;
+    });
+    return { rows, defaults };
+  }
+
+  if (parsed && typeof parsed === 'object') {
+    Object.entries(parsed).forEach(([key, value]) => {
+      rows.push({
+        key,
+        name: key,
+        example: typeof value === 'string' ? value : JSON.stringify(value),
+        required: '否',
+        type: Array.isArray(value) ? 'array' : typeof value,
+        desc: '-',
+      });
+      defaults[key] = value;
+    });
+    return { rows, defaults };
+  }
+
+  if (requestParams?.trim()) {
+    rows.push({
+      key: 'text-request-params',
+      name: '请求参数',
+      example: '-',
+      required: '按接口定义',
+      type: 'text',
+      desc: requestParams.trim(),
+    });
+    return { rows, defaults };
+  }
+
+  return {
+    rows: [
+      {
+        key: 'none',
+        name: '无',
+        example: '暂无',
+        required: '否',
+        type: 'string',
+        desc: '无',
+      },
+    ],
+    defaults,
+  };
+};
+
+const normalizeJsonText = (value?: string) => {
+  const parsed = tryParseJson(value);
+  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+    return JSON.stringify(parsed, null, 2);
+  }
+  return '{}';
 };
 
 const prettyJson = (value: any) => {
@@ -191,6 +305,16 @@ const InterfaceDetailPage: React.FC = () => {
   const [respCost, setRespCost] = useState<number | null>(null);
   const [respText, setRespText] = useState('');
   const [respFormat, setRespFormat] = useState<'json' | 'text'>('text');
+  const [requestParamsData, setRequestParamsData] = useState<RequestParamRow[]>([
+    {
+      key: 'none',
+      name: '无',
+      example: '暂无',
+      required: '否',
+      type: 'string',
+      desc: '无',
+    },
+  ]);
 
   const fetchDetail = useCallback(async () => {
     if (!interfaceId) {
@@ -212,15 +336,39 @@ const InterfaceDetailPage: React.FC = () => {
       setBaseUrl(targetUrl.baseUrl);
       setPath(targetUrl.path);
 
-      setHeaderJson(detail.requestHeader ? prettyJson(detail.requestHeader) : '{}');
-      setBodyText('{}');
+      setHeaderJson(normalizeJsonText(detail.requestHeader));
+      const requestParamInfo = buildRequestParamRows(detail.requestParams);
+      setRequestParamsData(requestParamInfo.rows);
+
+      const requestExampleObj = tryParseJson(detail.requestExample);
+      const defaultPayload =
+        requestExampleObj && typeof requestExampleObj === 'object' && !Array.isArray(requestExampleObj)
+          ? (requestExampleObj as Record<string, any>)
+          : requestParamInfo.defaults;
+
       if (['GET', 'HEAD'].includes(targetMethod)) {
+        setQueryJson(JSON.stringify(defaultPayload, null, 2));
+        setBodyText('{}');
         setBodyMode('none');
+      } else {
+        setQueryJson('{}');
+        setBodyText(JSON.stringify(defaultPayload, null, 2));
+        setBodyMode('json');
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : '获取接口详情失败';
       setErrorMessage(message);
       setInfo(null);
+      setRequestParamsData([
+        {
+          key: 'none',
+          name: '无',
+          example: '暂无',
+          required: '否',
+          type: 'string',
+          desc: '无',
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -298,17 +446,6 @@ const InterfaceDetailPage: React.FC = () => {
       setDebugLoading(false);
     }
   };
-
-  const requestParamsData = [
-    {
-      key: 'none',
-      name: '无',
-      example: '暂无',
-      required: '否',
-      type: 'string',
-      desc: '无',
-    },
-  ];
 
   const responseParamsData = [
     { key: 'code', name: 'code', type: 'int', desc: '响应码' },
