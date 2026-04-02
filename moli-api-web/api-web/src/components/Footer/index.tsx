@@ -1,4 +1,4 @@
-import { GithubOutlined } from '@ant-design/icons';
+import { ApiOutlined, BookOutlined, GithubOutlined } from '@ant-design/icons';
 import { DefaultFooter } from '@ant-design/pro-components';
 import React from 'react';
 
@@ -8,24 +8,35 @@ const Footer: React.FC = () => {
       style={{
         background: 'none',
       }}
-      copyright="Powered by Ant Desgin"
+      copyright="Moli-API Open Platform"
       links={[
         {
-          key: 'Ant Design Pro',
-          title: 'Ant Design Pro',
-          href: 'https://pro.ant.design',
-          blankTarget: true,
+          key: 'moli-api',
+          title: 'Moli-API',
+          href: '/home',
+        },
+        {
+          key: 'developer-docs',
+          title: (
+            <>
+              <BookOutlined /> 开发者文档
+            </>
+          ),
+          href: '/developer/docs',
+        },
+        {
+          key: 'api-square',
+          title: (
+            <>
+              <ApiOutlined /> 接口广场
+            </>
+          ),
+          href: '/home',
         },
         {
           key: 'github',
           title: <GithubOutlined />,
-          href: 'https://github.com/ant-design/ant-design-pro',
-          blankTarget: true,
-        },
-        {
-          key: 'Ant Design',
-          title: 'Ant Design',
-          href: 'https://ant.design',
+          href: 'https://github.com',
           blankTarget: true,
         },
       ]}
