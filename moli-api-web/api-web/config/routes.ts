@@ -29,6 +29,10 @@
     component: './TokenManage',
   },
   {
+    path: '/developer/docs',
+    component: './DeveloperDocs',
+  },
+  {
     path: '/manage/apis',
     name: '接口管理',
     icon: 'appstore',
