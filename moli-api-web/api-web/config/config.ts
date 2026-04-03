@@ -8,6 +8,7 @@ import proxy from './proxy';
 import routes from './routes';
 
 const { REACT_APP_ENV = 'dev' } = process.env;
+const ENABLE_OPENAPI = process.env.ENABLE_OPENAPI === 'true';
 
 /**
  * @name 使用公共路径
@@ -151,21 +152,23 @@ export default defineConfig({
    * @description 基于 openapi 的规范生成serve 和mock，能减少很多样板代码
    * @doc https://pro.ant.design/zh-cn/docs/openapi/
    */
-  openAPI: [
-    {
-      requestLibPath: "import { request } from '@umijs/max'",
-      // 或者使用在线的版本
-      // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
-      schemaPath: join(__dirname, 'oneapi.json'),
-      mock: false,
-    },
-    {
-      requestLibPath: "import { request } from '@umijs/max'",
-      schemaPath:
-        'https://gw.alipayobjects.com/os/antfincdn/CA1dOm%2631B/openapi.json',
-      projectName: 'swagger',
-    },
-  ],
+  openAPI: ENABLE_OPENAPI
+    ? [
+        {
+          requestLibPath: "import { request } from '@umijs/max'",
+          // 或者使用在线的版本
+          // schemaPath: "https://gw.alipayobjects.com/os/antfincdn/M%24jrzTTYJN/oneapi.json"
+          schemaPath: join(__dirname, 'oneapi.json'),
+          mock: false,
+        },
+        {
+          requestLibPath: "import { request } from '@umijs/max'",
+          schemaPath:
+            'https://gw.alipayobjects.com/os/antfincdn/CA1dOm%2631B/openapi.json',
+          projectName: 'swagger',
+        },
+      ]
+    : [],
   mock: false,
   /**
    * @name 是否开启 mako
