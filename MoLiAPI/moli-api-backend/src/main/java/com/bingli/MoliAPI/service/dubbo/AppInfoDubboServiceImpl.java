@@ -5,6 +5,7 @@ import com.bingli.MoliAPI.exception.ThrowUtils;
 import com.bingli.MoliAPI.model.entity.AppInfo;
 import com.bingli.MoliAPI.service.AppInfoDubboService;
 import com.bingli.MoliAPI.service.AppInfoService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
@@ -18,7 +19,10 @@ public class AppInfoDubboServiceImpl implements AppInfoDubboService {
     @Override
     public String getAppHostByAppId(Long appId) {
         AppInfo appInfo = getAppInfoByAppId(appId);
-        return appInfo.getHost();
+        // 兜底清洗配置中的空白和控制字符，避免网关拼接 URI 失败
+        String host = StringUtils.trimToEmpty(appInfo.getHost());
+        host = host.replaceAll("\\p{Cntrl}", "");
+        return StringUtils.trimToEmpty(host);
     }
 
     @Override

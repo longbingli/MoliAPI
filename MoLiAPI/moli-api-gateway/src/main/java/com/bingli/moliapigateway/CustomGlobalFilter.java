@@ -174,9 +174,15 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             return writeErrorResponse(response, ErrorCode.NOT_FOUND_ERROR, "下游服务不存在或未配置");
         }
 
+        String normalizedHost = normalizeHost(interfaceHost);
+        if (StringUtils.isBlank(normalizedHost)) {
+            log.error("下游 host 非法, rawHost='{}', appId={}", interfaceHost, interfaceInfo.getAppId());
+            return writeErrorResponse(response, ErrorCode.SYSTEM_ERROR, "下游 host 配置非法");
+        }
+
         URI targetUri;
         try {
-            UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(interfaceHost).path(path);
+            UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(normalizedHost).path(path);
             String rawQuery = request.getURI().getRawQuery();
             if (StringUtils.isNotBlank(rawQuery)) {
                 uriBuilder.query(rawQuery);
@@ -298,6 +304,23 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
     public Mono<Void> handleInvokeError(ServerHttpResponse response) {
         return writeErrorResponse(response, ErrorCode.SYSTEM_ERROR, "系统内部异常");
+    }
+
+    /**
+     * 统一清洗 host，避免前后空白或控制字符导致 URI 构造失败。
+     */
+    private String normalizeHost(String rawHost) {
+        String host = StringUtils.trimToEmpty(rawHost);
+        host = host.replaceAll("\\p{Cntrl}", "");
+        host = StringUtils.trimToEmpty(host);
+        if (StringUtils.isBlank(host)) {
+            return host;
+        }
+        if (!StringUtils.startsWithIgnoreCase(host, "http://")
+                && !StringUtils.startsWithIgnoreCase(host, "https://")) {
+            host = "http://" + host;
+        }
+        return StringUtils.removeEnd(host, "/");
     }
 
     @Override
