@@ -19,7 +19,11 @@ import '@ant-design/v5-patch-for-react-19';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
-const API_BASE_URL = process.env.API_BASE_URL || '/api';
+const API_BASE_URL =
+  process.env.API_BASE_URL ||
+  (process.env.NODE_ENV === 'production'
+    ? 'https://api-backend.moka123.cn/api'
+    : '/api');
 
 /**
  * 获取全局初始化状态
