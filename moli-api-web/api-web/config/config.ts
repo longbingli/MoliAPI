@@ -42,6 +42,10 @@ export default defineConfig({
    */
   // umi routes: https://umijs.org/docs/routing
   routes,
+  // 生产环境避免依赖服务器 history fallback，直接使用 hash 路由防止刷新 404
+  history: {
+    type: 'hash',
+  },
   /**
    * @name 主题的配置
    * @description 虽然叫主题，但是其实只是 less 的变量设置
