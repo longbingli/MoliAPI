@@ -19,6 +19,7 @@ import '@ant-design/v5-patch-for-react-19';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+const API_BASE_URL = process.env.API_BASE_URL || '/api';
 
 /**
  * 获取全局初始化状态
@@ -145,7 +146,7 @@ export const layout: RunTimeLayoutConfig = ({
  * 全局请求配置
  */
 export const request: RequestConfig = {
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   withCredentials: true,
   ...errorConfig,
 };
