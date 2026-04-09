@@ -24,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,11 @@ public class DemoController {
             });
         }
 
-        String url = uriBuilder.build(true).toUriString();
+        // 统一由后端按 UTF-8 编码查询参数，避免中文参数触发非法 URI 异常
+        String url = uriBuilder
+                .build(false)
+                .encode(StandardCharsets.UTF_8)
+                .toUriString();
         String body = StringUtils.defaultString(invokeRequest.getBody());
 
         HttpRequest downstreamRequest = HttpRequest.of(url)
