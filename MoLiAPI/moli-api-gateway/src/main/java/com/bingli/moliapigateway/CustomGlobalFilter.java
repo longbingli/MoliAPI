@@ -3,6 +3,7 @@ package com.bingli.moliapigateway;
 import com.bingli.MoliAPI.common.BaseResponse;
 import com.bingli.MoliAPI.common.ErrorCode;
 import com.bingli.MoliAPI.common.ResultUtils;
+import com.bingli.MoliAPI.model.entity.AppInfo;
 import com.bingli.MoliAPI.model.entity.InterfaceInfo;
 import com.bingli.MoliAPI.model.entity.User;
 import com.bingli.MoliAPI.service.AppInfoDubboService;
@@ -161,14 +162,25 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             return writeErrorResponse(response, ErrorCode.FORBIDDEN_ERROR, "接口已关闭");
         }
 
-        String interfaceHost;
+        AppInfo appInfo;
         try {
-            interfaceHost = appInfoDubboService.getAppHostByAppId(interfaceInfo.getAppId());
+            appInfo = appInfoDubboService.getAppInfoByAppId(interfaceInfo.getAppId());
         } catch (Exception e) {
-            log.error("查询下游 host 失败", e);
-            return writeErrorResponse(response, ErrorCode.SYSTEM_ERROR, "查询下游端口失败");
+            log.error("查询应用信息失败", e);
+            return writeErrorResponse(response, ErrorCode.SYSTEM_ERROR, "查询应用信息失败");
         }
 
+        if (!hasEnoughPoints(invokeUser, appInfo)) {
+            log.warn("用户积分不足，拒绝调用, userId={}, interfaceId={}, appId={}, userPoints={}, deductPoints={}",
+                    invokeUser.getId(),
+                    interfaceInfo.getId(),
+                    interfaceInfo.getAppId(),
+                    invokeUser.getPoints(),
+                    appInfo == null ? null : appInfo.getDeductPoints());
+            return writeErrorResponse(response, ErrorCode.OPERATION_ERROR, "积分不足");
+        }
+
+        String interfaceHost = appInfo == null ? null : appInfo.getHost();
         if (StringUtils.isBlank(interfaceHost)) {
             log.error("未查询到下游 host, appId={}", interfaceInfo.getAppId());
             return writeErrorResponse(response, ErrorCode.NOT_FOUND_ERROR, "下游服务不存在或未配置");
@@ -269,6 +281,21 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     }
 
     /**
+     * 转发前先校验积分，避免积分不足时下游接口已经被真正调用
+     */
+    private boolean hasEnoughPoints(User invokeUser, AppInfo appInfo) {
+        if (invokeUser == null || appInfo == null) {
+            return false;
+        }
+        Integer deductPoints = appInfo.getDeductPoints();
+        if (deductPoints == null || deductPoints <= 0) {
+            return true;
+        }
+        Integer userPoints = invokeUser.getPoints();
+        return userPoints != null && userPoints >= deductPoints;
+    }
+
+    /**
      * 统一写出 JSON 响应
      */
     private Mono<Void> writeJsonResponse(ServerHttpResponse response,
@@ -307,7 +334,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     }
 
     /**
-     * 统一清洗 host，避免前后空白或控制字符导致 URI 构造失败。
+     * 统一清洗 host，避免前后空白或控制字符导致 URI 构造失败
      */
     private String normalizeHost(String rawHost) {
         String host = StringUtils.trimToEmpty(rawHost);
